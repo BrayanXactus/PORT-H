@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Software Censo de Usuarios del Recurso Hídrico</title>
+    <style>
+        body {
+            font-family: 'Open Sans', 'Quicksand', sans-serif;
+            margin: 0 !important;
+            padding: 0 !important;
+            background-color: #f4f4f4;
+            text-align: center;
+        }
+        .home-body{
+            width: 100%;
+            height: 100vh;
+        }
+        .container-home {
+            background-color: #0c4a6e;
+            padding: 20px;
+            color: white;
+            width: 100%;
+            height: 100vh;
+            gap: 30px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            box-sizing: border-box;
+        }
+        .logo {
+            width: 150px;
+            margin-bottom: 10px;
+        }
+        h1 {
+            margin: 10px 0 30px 0;
+            font-size: 30px;
+            color: white;
+            font-weight: 700;
+        }
+        @media (max-width: 1000px) {
+            h1 {
+                
+                font-size: 26px;
+                
+            }
+        }
+        .buttons-container {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            width: 100%;
+            margin-top: 20px;
+            flex-wrap: wrap;
+            padding: 0 15px;
+        }
+        .button {
+            background-color: #0C4A6E;
+            padding: 15px;
+            border-radius: 10px;
+            width: calc(20% - 16px); 
+            min-width: 150px;
+            text-align: center;
+            cursor: pointer;
+            transition: transform 0.2s;
+       
+            margin-bottom: 20px;
+        }
+        .button:hover {
+            transform: scale(1.05);
+        }
+        .button img {
+            width: 190px;
+            border-radius: 50%;
+            display: block;
+            margin: 0 auto 10px;
+            background-color: white;
+        }
+        .button span {
+            display: block;
+            font-size: 16px;
+            font-weight: bold;
+            color: #0C4A6E;
+            background-color: white;
+            padding: 10px 0;
+            margin: 0 35px;
+            border-radius: 8px;
+        }
+        @media (max-width: 1400px) {
+            .button {
+                width: calc(25% - 15px); 
+            }
+        }
+        @media (max-width: 1200px) {
+            .button span {
+                margin: 0 3%;
+            }
+        }
+        @media (max-width: 992px) {
+            .button {
+                width: calc(50% - 15px);
+            }
+        }
+        @media (max-width: 576px) {
+            .button {
+                width: 100%;
+            }
+        }
+        .header-navbar{
+            display: none;
+        }
+    </style>
+</head>
+<body ng-controller="homeController" class="home-body">
+    <div class="container-home">
+        
+        <h1>Software Censo de Usuarios del Recurso Hídrico</h1>
+        
+        <div class="buttons-container">
+            <div class="button" ng-click="navegarMenu('generalidades')">
+                <img src="image/MAP.png" alt="Usuario Externo">
+                <span>Generalidades del Censo</span>
+            </div>
+            <div class="button" ng-click="navegarMenu('abierta')">
+                <img src="image/USUARIO_EXTERNO.png" alt="Usuario Externo">
+                <span>Usuario Externo</span>
+            </div>
+            <div class="button" ng-click="navegarMenu('inicio')">
+                <img src="image/USUARIO_INTERNO.png" alt="Usuario Interno">
+                <span>Usuario Interno</span>
+            </div>
+            <div class="button" ng-click="navegarMenu('registro')">
+                <img src="image/CAPTURA_DE_DATOS.png" alt="Captura Datos" class="captura-datos">
+                <span>Captura Datos</span>
+            </div>
+            <div class="button" ng-click="navegarMenu('usuario')">
+                <img src="image/USUARIO_ADMIN.png" alt="Usuario Admin">
+                <span>Usuario Admin</span>
+            </div>
+        </div>
+    </div>
+    
+</body>
+</html>

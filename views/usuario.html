@@ -1,0 +1,136 @@
+<div class="home-button" style="top: 20px; left: 20px; z-index: 1000; background-color: #0C4A6E; margin-bottom: 10px; padding: 7px 14px;">
+    <a href="#!/" class="nav-link pointer">
+        <div style="width: 50px; height: 50px; background-color: #c1d044; border-radius: 50%; display: flex; justify-content: center; align-items: center;">
+        <i class="la la-home" style="font-size: 25px; color: white;"></i>
+        </div>
+    </a>
+</div>
+
+
+<div class="row" style="margin-right: 35px; margin-left: 35px; margin-top: 35px; margin-bottom: 35px;">
+    <div class="col-md-4">
+        <form ng-submit="guardarEditarUsuario()" class="form-app">
+            <div class="card">
+                <div class="card-header" ng-if="oRegistro.id === null">
+                    <h4 class="card-title">Agregar usuario</h4>
+                </div>
+
+                <div class="card-header" ng-if="oRegistro.id !== null">
+                    <h4 class="card-title">Editar usuario</h4>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-body">
+                    <div class="form-group">
+                        <label for="nombre_usuario">Tipo de usuario</label>
+    
+                        <fieldset class="checkbox">
+                            <label>
+                                <input type="checkbox" name="permiso_usuario" id="permiso_editar_encuesta" ng-value="1" ng-model="oRegistro.editar_encuesta" ng-click="seleccionaPermiso()">
+                                Editar encuesta
+                            </label>
+                        </fieldset>
+
+                        <fieldset class="checkbox">
+                            <label>
+                                <input type="checkbox" name="permiso_usuario" id="permiso_agregar_encuesta" ng-value="1" ng-model="oRegistro.agregar_encuesta" ng-click="seleccionaPermiso()">
+                                Agregar encuesta
+                            </label>
+                        </fieldset>
+
+                        <fieldset class="checkbox">
+                            <label>
+                                <input type="checkbox" name="permiso_usuario" id="permiso_exportar_encuesta" ng-value="1" ng-model="oRegistro.exportar_encuesta" ng-click="seleccionaPermiso()">
+                                Exportar encuesta
+                            </label>
+                        </fieldset>
+
+                        <fieldset class="checkbox">
+                            <label>
+                                <input type="checkbox" name="permiso_usuario" id="permiso_administrar_usuarios" ng-value="1" ng-model="oRegistro.administrar_usuarios" ng-click="seleccionaPermiso()">
+                                Administrar usuario
+                            </label>
+                        </fieldset>
+
+                        <fieldset class="checkbox">
+                            <label>
+                                <input type="checkbox" name="permiso_usuario" id="permiso_consultar_encuesta" ng-value="1" ng-model="oRegistro.consultar_encuesta" ng-click="seleccionaPermiso()">
+                                Consultar encuesta
+                            </label>
+                        </fieldset>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="nombre_usuario">Nombre</label>
+                        <input type="text" autocomplete="off" class="form-control" name="nombre_usuario" id="nombre_usuario" ng-model="oRegistro.nombre" minlength="4" maxlength="200" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="correo_electronico">Correo electrónico</label>
+                        <input type="email" autocomplete="off" class="form-control" name="correo_electronico" id="correo_electronico" ng-model="oRegistro.correo_electronico" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="fecha_caducidad">Fecha de caducidad</label>
+                        <input type="date" class="form-control" name="fecha_caducidad" id="fecha_caducidad" ng-model="oRegistro.fecha_caducidad">
+                    </div>
+
+                    <div class="form-group" ng-if="oRegistro.id !== null">
+                        <fieldset class="checkbox">
+                            <label>
+                                <input type="checkbox" value="" name="modificar_contrasenia" id="modificar_contrasenia" ng-model="oRegistro.modificar_contrasenia" ng-check="oRegistro.modificar_contrasenia">
+                                Modificar contraseña
+                            </label>
+                        </fieldset>
+                    </div>
+
+                    <div class="form-group" ng-if="oRegistro.modificar_contrasenia || oRegistro.id === null">
+                        <label for="contrasenia_usuario" class="pointer">
+                            <div class="txttooltip">
+                                Contraseña <i class="fas fa-info"></i>
+                                <!--<span class="tooltiptext">Al menos 1 mayúscula, al menos 1 minúscula, al menos 1 número, al menos 1 símbolo (!@#$%^&*_=+-) y longitud 8 a 12 caracteres</span>-->
+                                <span class="tooltiptext">Al menos 8 caracteres</span>
+                            </div>
+                        </label>
+                        <!--<input type="password" autocomplete="off" class="form-control" name="contrasenia_usuario" id="contrasenia_usuario" ng-model="oRegistro.contrasenia" pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@()#$%^&*_=+-]).{8,12}$" required>-->
+                        <input type="password" autocomplete="off" class="form-control" name="contrasenia_usuario" id="contrasenia_usuario" ng-model="oRegistro.contrasenia" minlength="8" required>
+                    </div>
+
+                    <div class="form-group" ng-if="oRegistro.modificar_contrasenia || oRegistro.id === null">
+                        <label for="contrasenia_usuario_2">Confirmar contraseña</label>
+                        <input type="password" autocomplete="off" class="form-control" name="contrasenia_usuario_2" id="contrasenia_usuario_2" ng-model="oRegistro.contrasenia_2" minlength="8" maxlength="20" required>
+                    </div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-body">
+                    <button type="submit" class="btn btn-info">Guardar</button>
+                    <button type="button" class="btn btn-secondary" ng-show="oRegistro.id !== null" ng-click="cancelarEdicion()">Cancelar</button>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="col-md-8">
+        <div class="card" ng-repeat="oRegistro in aUsuarios">
+            <div class="card-header pointer">
+                <h4 class="card-title">{{ oRegistro.nombre }}</h4>
+                <div class="heading-elements">
+                    <ul class="list-inline mb-0">
+                        <li ng-click="editarUsuario(oRegistro)"><a data-action="collapse"><i class="fas fa-edit"></i></a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="card-body">
+                <ul class="list-group">
+                    <li class="list-group-item">
+                        <h5 class="text-bold-600">Correo electrónico:</h5>
+                        <small class="text-muted">{{ oRegistro.correo }}</small>
+                    </li>
+                    <li class="list-group-item" ng-if="oRegistro.fecha_caducidad">
+                        <h5 class="text-bold-600">Fecha de caducidad:</h5>
+                        <small class="text-muted">{{ oRegistro.fecha_caducidad | date:'dd/MM/yyyy' }}</small>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>

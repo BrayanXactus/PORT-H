@@ -1,0 +1,15 @@
+{
+    "name": "aite/movilencuesta",
+    "description": "movilencuesta",
+    "require": {
+        "mpdf/mpdf": "8.*",
+        "aws/aws-sdk-php": "*",
+        "drmonty/leaflet-image": "^0.4.0",
+        "leaflet/leaflet": "*"
+    },
+    "autoload": {
+        "psr-4": {
+            "core\\": "core/"
+        }
+    }
+}

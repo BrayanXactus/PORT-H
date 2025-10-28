@@ -1,0 +1,396 @@
+.cs-loader {
+    height: 100%; 
+    width: 100%;
+    position: fixed; 
+    top: 0; 
+    left: 0; 
+    padding: 0px;
+    margin: 0px;
+    text-align: center;
+    vertical-align: middle;
+    background: rgba(77, 141, 250, 0.6);
+    background: -moz-linear-gradient(-45deg, rgba(77, 141, 250, 0.6) 32%, rgba(0, 0, 0, 0.6) 99%);
+    background: -webkit-linear-gradient(-45deg, rgba(77, 141, 250, 0.6) 32%,rgba(0, 0, 0, 0.6) 99%);
+    background: linear-gradient(135deg, rgba(77, 141, 250, 0.6) 32%,rgba(0, 0, 0, 0.6) 99%);
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#4d8dfa', endColorstr='#000000',GradientType=1 ); 
+    z-index:2000 !important;
+}
+
+.cs-loader-inner {
+    transform: translateY(-50%);
+    top: 40%;
+    position: absolute;
+    width: 100%;
+    color: #FFF;
+    padding: 0 100px;
+    text-align: center;
+}
+
+.cs-loader-inner label {
+    font-size: 20px;
+    opacity: 0;
+    display:inline-block;
+}
+
+.menu-sesion {
+	margin-top: 0px !important;
+}
+
+[ng\:cloak],[ng-cloak],.ng-cloak{display:none !important}
+
+@keyframes lol {
+    0% {
+        opacity: 0;
+        transform: translateX(-300px);
+    }
+    33% {
+        opacity: 1;
+        transform: translateX(0px);
+    }
+    66% {
+        opacity: 1;
+        transform: translateX(0px);
+    }
+    100% {
+        opacity: 0;
+        transform: translateX(300px);
+    }
+}
+
+@-webkit-keyframes lol {
+    0% {
+        opacity: 0;
+        -webkit-transform: translateX(-300px);
+    }
+    33% {
+        opacity: 1;
+        -webkit-transform: translateX(0px);
+    }
+    66% {
+        opacity: 1;
+        -webkit-transform: translateX(0px);
+    }
+    100% {
+        opacity: 0;
+        -webkit-transform: translateX(300px);
+    }
+}
+
+.cs-loader-inner label:nth-child(6) {
+    -webkit-animation: lol 3s infinite ease-in-out;
+    animation: lol 3s infinite ease-in-out;
+}
+
+.cs-loader-inner label:nth-child(5) {
+    -webkit-animation: lol 3s 100ms infinite ease-in-out;
+    animation: lol 3s 100ms infinite ease-in-out;
+}
+
+.cs-loader-inner label:nth-child(4) {
+    -webkit-animation: lol 3s 200ms infinite ease-in-out;
+    animation: lol 3s 200ms infinite ease-in-out;
+}
+
+.cs-loader-inner label:nth-child(3) {
+    -webkit-animation: lol 3s 300ms infinite ease-in-out;
+    animation: lol 3s 300ms infinite ease-in-out;
+}
+
+.cs-loader-inner label:nth-child(2) {
+    -webkit-animation: lol 3s 400ms infinite ease-in-out;
+    animation: lol 3s 400ms infinite ease-in-out;
+}
+
+.cs-loader-inner label:nth-child(1) {
+    -webkit-animation: lol 3s 500ms infinite ease-in-out;
+    animation: lol 3s 500ms infinite ease-in-out;
+}
+
+.dv-sup { margin-top: 30px; }
+
+.pointer {
+    cursor:pointer;
+}
+
+#sesion {
+    display: flex;
+    width: 100vw;
+    height: 100vh;
+    justify-content: center;
+    align-items: center;
+}
+
+.input-group-addon, .input-group {
+    white-space: nowrap;
+    vertical-align: middle;
+}
+
+.input-group-addon {
+    padding: 10px 12px;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 1;
+    color: #555;
+    text-align: center;
+    background-color: #eee;
+    border: 1px solid #ccc;
+    border-top-color: rgb(204, 204, 204);
+    border-top-style: solid;
+    border-top-width: 1px;
+    border-right-color: rgb(204, 204, 204);
+    border-right-style: solid;
+    border-right-width: 1px;
+    border-bottom-color: rgb(204, 204, 204);
+    border-bottom-style: solid;
+    border-bottom-width: 1px;
+    border-left-color: rgb(204, 204, 204);
+    border-left-style: solid;
+    border-left-width: 1px;
+    border-image-outset: 0;
+    border-image-repeat: stretch;
+    border-image-slice: 100%;
+    border-image-source: none;
+    border-image-width: 1;
+    border-radius: 4px;
+    border-top-right-radius: 4px;
+    border-bottom-right-radius: 4px;
+}
+
+.snackbar {
+    display: none;
+    min-width: 250px;
+    margin-left: -125px;
+    text-align: center;
+    border-radius: 2px;
+    padding: 16px;
+    position: fixed;
+    z-index: 50000;
+    left: 50%;
+    top: 30px;
+    font-size: 17px;
+    border-radius: 15px;
+}
+
+.snackbar_error {
+    background-color: rgba(254, 46, 46, 0.7);
+    color: #fff;
+    font-weight: bold;
+}
+
+.snackbar_info {
+    background-color: rgba(46, 100, 254, 0.7);
+    color: #fff;
+    font-weight: bold;
+}
+
+.snackbar_success {
+    background-color: rgba(58, 223, 0, 0.7);
+    color: #fff;
+    font-weight: bold;
+}
+
+.snackbar_warning {
+    background-color: rgba(215, 223, 1, 0.7);
+    color: #000;
+    font-weight: bold;
+}
+  
+.snackbar.show {
+    visibility: visible;
+    -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
+    animation: fadein 0.5s, fadeout 0.5s 2.5s;
+}
+  
+@-webkit-keyframes fadein {
+    from {top: 0; opacity: 0;} 
+    to {top: 30px; opacity: 1;}
+}
+  
+@keyframes fadein {
+    from {top: 0; opacity: 0;}
+    to {top: 30px; opacity: 1;}
+}
+  
+@-webkit-keyframes fadeout {
+    from {top: 30px; opacity: 1;} 
+    to {top: 0; opacity: 0;}
+}
+
+@keyframes fadeout {
+    from {top: 30px; opacity: 1;}
+    to {top: 0; opacity: 0;}
+}
+
+.txttooltip {
+    position: relative;
+    display: inline-block;
+}
+  
+  /* Tooltip text */
+.txttooltip .tooltiptext {
+    visibility: hidden;
+    width: 300px;
+    background-color: black;
+    color: #fff;
+    text-align: center;
+    padding: 5px 0;
+    border-radius: 6px;
+   
+    /* Position the tooltip text - see examples below! */
+    position: absolute;
+    z-index: 1;
+}
+  
+  /* Show the tooltip text when you mouse over the tooltip container */
+  .txttooltip:hover .tooltiptext {
+    visibility: visible;
+  }
+
+input[type="file"] {
+    display: none;
+}
+
+.selectize-input {
+    height: auto !important;
+}
+
+.navbar-dark.navbar-horizontal {
+    background: #1cc09f !important;
+}
+
+.btn-info {
+    border-color: #1cc09f !important;
+    background-color: #1cc09f !important;
+    color: #FFFFFF;
+}
+
+.btn-info:hover {
+    border-color: #1cc08f !important;
+    background-color: #1cc08f !important;
+    color: #FFFFFF !important;
+}
+
+.floating-r {
+    float: right;
+    position: absolute;
+    right: 20px;
+    top: 20px;
+    background-color: rgba(0, 0, 0, 0.6);
+    z-index: 1000;
+}
+
+.abierta-nav {
+    background-color: #197091;
+}
+.abiert-bg{
+    background-color: #0C4A6E;
+}
+
+.abierta-nav .navbar-brand {
+    width: 50px;
+    height: 50px;
+    -moz-border-radius: 50%;
+    -webkit-border-radius: 50%;
+    border-radius: 50%;
+    background: #c1d043;
+    padding-bottom: 5px;
+}
+
+.abierta-nav .navbar-brand .nav-link {
+    padding: 0.4rem 0.9rem !important;
+}
+
+.abierta-nav .navbar-brand .la {
+    font-size: 1.8rem !important;
+    color:rgb(255, 255, 255);
+}
+
+.selectize-control {
+    width: 100%;
+}
+
+.bloque-info-reporte {
+    background-color: #ddecf1;
+    -webkit-border-radius: 20px;
+    -moz-border-radius: 20px;
+    border-radius: 20px;
+    height: 80px;
+    width: 80%;
+    padding-top: 10px;
+    text-align: center;
+    color: #197091;
+    font-size: 1.5em;
+    font-weight: bold;
+    /*display:table-cell;*/
+    vertical-align:middle;
+    display: inline-block;
+}
+
+.bloque-texto-info-reporte {
+    background-color: #efeced;
+    color: #a59e9f;
+    font-weight: bold;
+    font-size: 0.8em;
+    text-align: center;
+    width: 95%;
+    display: inline-block;
+}
+
+.reporte-100 {
+    margin: 0px !important;
+    padding: 0px !important;    
+}
+
+#seccion2 .selectize-input {
+    background-color: #197091;
+    color: #abd043;
+    border: 1px solid #abd043;
+}
+
+#seccion2 .selectize-dropdown {
+    background-color: #197091;
+    color: #abd043;
+}
+
+#legend {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background-color: white;
+    padding: 10px;
+    border: 1px solid #ccc;
+  }
+  
+  .legend-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 5px;
+  }
+  
+  .color-box {
+    width: 20px;
+    height: 20px;
+    margin-right: 10px;
+  }
+
+  .acciones-botones{
+    display:flex;
+    justify-content:center;   /* centra horizontalmente */
+    align-items:center;
+    flex-wrap:wrap;           /* si no caben, bajan */
+    gap: 8px 12px;            /* espacio entre filas y columnas */
+  }
+
+    /* === Quitar el rectángulo negro al hacer clic sobre polígonos o marcadores === */
+    .leaflet-interactive:focus,
+    .leaflet-marker-icon:focus,
+    .leaflet-popup:focus {
+    outline: none !important;
+    box-shadow: none !important;
+    }
+
+    /* También cubrir casos SVG */
+    svg path.leaflet-interactive:focus {
+    outline: none !important;
+    box-shadow: none !important;
+    }

@@ -1,0 +1,229 @@
+<div class="row" style="padding-bottom: 30px;">
+    <div class="col-md-12 col-sm-12">
+        <form class="form" name="frm_encuesta" id="frm_encuesta" ng-submit="guardarCambiosEncuesta()" autocomplete="off">
+            <div class="card dv-sup">
+                <div class="card-header">
+                    <h4 class="card-title">Módulos</h4>
+                </div>
+                <div class="card-body">
+                    <div class="d-inline-block custom-control custom-checkbox mr-1">
+                        <input type="checkbox" class="custom-control-input" name="modulo" id="checkbox1" ng-checked="oEditarEncuesta.modulo1" ng-model="oEditarEncuesta.modulo1" ng-click="ocultarMostrarModulo()">
+                        <label class="custom-control-label" for="checkbox1">Captaciones</label>
+                    </div>
+
+                    <div class="d-inline-block custom-control custom-checkbox mr-1">
+                        <input type="checkbox" class="custom-control-input" name="modulo" id="checkbox2" ng-checked="oEditarEncuesta.modulo2" ng-model="oEditarEncuesta.modulo2" ng-click="ocultarMostrarModulo()">
+                        <label class="custom-control-label" for="checkbox2">Vertimiento</label>
+                    </div>
+
+                    <div class="d-inline-block custom-control custom-checkbox mr-1">
+                        <input type="checkbox" class="custom-control-input" name="modulo" id="checkbox3" ng-checked="oEditarEncuesta.modulo3" ng-model="oEditarEncuesta.modulo3" ng-click="ocultarMostrarModulo()">
+                        <label class="custom-control-label" for="checkbox3">Ocupación de cauce - Obras hidráulicas</label>
+                    </div>
+
+                    <div class="d-inline-block custom-control custom-checkbox mr-1">
+                        <input type="checkbox" class="custom-control-input" name="modulo" id="checkbox4" ng-checked="oEditarEncuesta.modulo4" ng-model="oEditarEncuesta.modulo4" ng-click="ocultarMostrarModulo()">
+                        <label class="custom-control-label" for="checkbox4">Actividad minera</label>
+                    </div>
+                </div>
+            </div>
+
+            <div ng-repeat="oRegistro in oEditarEncuesta.estructura" ng-attr-class="{{ 'card dv-sup modulo' + oRegistro.id_modulo }}">
+                <div class="card-header">
+                    <h4 class="card-title">{{ oRegistro.titulo }}</h4>
+                </div>
+                <div class="card-body">
+                    <ul class="list-group" ng-repeat="oGrupo in oRegistro.grupos">
+                        <li class="list-group-item" ng-repeat="oCampo in oGrupo.campos" ng-if="oGrupo.mostrar && oGrupo.tipo === 'informacion'">
+                            <div class="form-group" ng-if="oCampo.tipo === 'disabled_edit'">
+                                <label ng-attr-for="{{ oRegistro.tabla + '_' + oCampo.bd }}" class="text-bold-600">{{ oCampo.titulo }}</label>
+                                <input type="text" class="form-control" ng-attr-id="{{ oRegistro.tabla + '_' + oCampo.bd }}" ng-attr-name="{{ oRegistro.tabla + '_' + oCampo.bd }}" ng-value="oCampo.valor" disabled="disabled" />
+                            </div>
+    
+                            <div class="form-group" ng-if="oCampo.tipo === 'texto' || oCampo.tipo === 'numero' || oCampo.tipo === 'decimal' || oCampo.tipo === 'seleccion_simple_texto_editable'" ng-keyup="ingresaDatos(oRegistro.tabla, oCampo)">
+                                <label ng-attr-for="{{ oRegistro.tabla + '_' + oCampo.bd }}" class="text-bold-600">{{ oCampo.titulo }}</label>
+                                <input type="text" class="form-control" ng-if="oCampo.requerido" ng-attr-id="{{ oRegistro.tabla + '_' + oCampo.bd }}" ng-attr-name="{{ oRegistro.tabla + '_' + oCampo.bd }}" ng-model="oCampo.valor" ng-keyup="ingresaDatos(oRegistro.tabla, oCampo)" required />
+                                <input type="text" class="form-control" ng-if="!oCampo.requerido" ng-attr-id="{{ oRegistro.tabla + '_' + oCampo.bd }}" ng-attr-name="{{ oRegistro.tabla + '_' + oCampo.bd }}" ng-model="oCampo.valor" ng-keyup="ingresaDatos(oRegistro.tabla, oCampo)" />
+                            </div>
+
+                            <!--<div class="form-group" ng-if="oCampo.tipo === 'numero'">
+                                <label ng-attr-for="{{ oRegistro.tabla + '_' + oCampo.bd }}" class="text-bold-600">{{ oCampo.titulo }}</label>
+                                <input type="number" class="form-control" ng-attr-step="oCampo.step" ng-attr-max="oCampo.max" ng-attr-min="oCampo.min" ng-attr-id="{{ oRegistro.tabla + '_' + oCampo.bd }}" ng-attr-name="{{ oRegistro.tabla + '_' + oCampo.bd }}" ng-model="oCampo.valor" ng-keyup="ingresaDatos(oRegistro.tabla, oCampo)" />
+                            </div>-->
+    
+                            <div class="form-group" ng-if="oCampo.tipo === 'texto_largo'">
+                                <label ng-attr-for="{{ oRegistro.tabla + '_' + oCampo.bd }}" class="text-bold-600">{{ oCampo.titulo }}</label>
+                                <textarea class="form-control" ng-attr-id="{{ oRegistro.tabla + '_' + oCampo.bd }}" ng-attr-name="{{ oRegistro.tabla + '_' + oCampo.bd }}" ng-model="oCampo.valor" />
+                            </div>
+    
+                            <div class="form-group" ng-if="oCampo.tipo === 'imagen' && oCampo.valor !== null">
+                                <label style="display:block;" class="form-label">{{ oCampo.titulo }}</label>
+                                <img ng-if="oGrupo.tipo === 'imagen'" ng-attr-src="{{ oCampo.valor }}" style="max-height: 300px" />
+                            </div>
+    
+                            <div class="form-group" ng-if="oCampo.tipo === 'fecha_hora'">
+                                <label ng-attr-for="{{ oRegistro.tabla + '_' + oCampo.bd }}" class="text-bold-600">{{ oCampo.titulo }}</label>
+    
+                                <div class="col-md-6 col-sm-12" style="padding: 0px; margin: 0px;">
+                                    <input type="datetime-local" step="1" class="form-control" ng-attr-name="{{ oRegistro.tabla + '_' + oCampo.bd }}" ng-attr-id="{{ oRegistro.tabla + '_' + oCampo.bd }}" ng-model="oCampo.valor" />
+                                </div>
+                            </div>
+    
+                            <div class="form-group" ng-if="oCampo.tipo === 'fecha'">
+                                <label ng-attr-for="{{ oRegistro.tabla + '_' + oCampo.bd }}" class="text-bold-600">{{ oCampo.titulo }}</label>
+    
+                                <div class="col-md-6 col-sm-12" style="padding: 0px; margin: 0px;">
+                                    <input type="date" class="form-control" ng-attr-name="{{ oRegistro.tabla + '_' + oCampo.bd }}" ng-attr-id="{{ oRegistro.tabla + '_' + oCampo.bd }}" ng-model="oCampo.valor" />
+                                </div>
+                            </div>
+    
+                            <div class="form-group" ng-if="oCampo.tipo === 'seleccion_simple'">
+                                <label ng-attr-for="{{ oRegistro.tabla + '_' + oCampo.bd }}" class="text-bold-600">{{ oCampo.titulo }}</label>
+    
+                                <div class="col-md-6 col-sm-12" style="padding: 0px; margin: 0px;">
+                                    <div class="input-group" style="width: 100%;">
+                                        <ui-select theme="selectize" class="ui-special-group" ng-attr-name="{{ oRegistro.tabla + '_' + oCampo.bd }}" ng-attr-id="{{ oRegistro.tabla + '_' + oCampo.bd }}" ng-model="oCampo.valor" ng-change="seleccionSimple(oRegistro.tabla, oCampo)" style="width: 80%;">
+                                            <ui-select-match placeholder="Seleccionar">
+                                                {{ $select.selected.nombre }}
+                                            </ui-select-match>
+            
+                                            <ui-select-choices repeat="oOpcion.id as oOpcion in oCampo.aOpcionesLista | orderBy:'nombre' | filter: $select.search" refresh-delay="0">
+                                                <div ng-bind-html="oOpcion.nombre | highlight: $select.search"></div>
+                                            </ui-select-choices>
+                                        </ui-select>
+                                        <span class="input-group-append" style="height: 40px;" ng-click="limpiarSelect(oRegistro.tabla, oCampo)">
+                                            <button class="btn btn-primary" type="button"><i class="fas fa-broom"></i></button>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group" ng-if="oCampo.tipo === 'seleccion_multiple'">
+                                <label ng-attr-for="{{ oRegistro.tabla + '_' + oCampo.bd }}" class="text-bold-600">{{ oCampo.titulo }}</label>
+    
+                                <div class="col-md-6 col-sm-12" style="padding: 0px; margin: 0px;">
+                                    <select multiple class="form-control" ng-attr-name="{{ oRegistro.tabla + '_' + oCampo.bd }}" ng-attr-id="{{ oRegistro.tabla + '_' + oCampo.bd }}" ng-multiple="true" ng-model="oCampo.valor" ng-change="seleccionMultiple(oRegistro.tabla, oCampo)">
+                                        <option ng-repeat="oOpcion in oCampo.aOpcionesLista" ng-value="oOpcion.id">{{ oOpcion.nombre }}</option>
+                                    </select>
+                                </div>
+                            </div>
+    
+                            <div class="form-group" ng-if="oCampo.tipo === 'radio'">
+                                <label class="text-bold-600" style="display:block;">{{ oCampo.titulo }}</label>
+    
+                                <div class="form-check form-check-inline" ng-repeat="oOpcion in oCampo.aOpcionesLista | orderBy:'nombre'">
+                                    <input class="form-check-input" type="radio" ng-attr-name="{{ oRegistro.tabla + '_' + oCampo.bd + '_' + oOpcion.id }}" ng-attr-id="{{ oRegistro.tabla + '_' + oCampo.bd + '_' + oOpcion.id }}" ng-value="oOpcion.id" ng-model="oCampo.valor" ng-click="seleccionSimple(oRegistro.tabla, oCampo)">
+                                    <label class="form-check-label" ng-attr-for="{{ oRegistro.tabla + '_' + oCampo.bd + '_' + oOpcion.id }}">{{ oOpcion.nombre }}</label>
+                                </div>
+                            </div>
+                        </li>
+
+                        <li class="list-group-item" ng-repeat="oCampo in oGrupo.campos" ng-if="oGrupo.tipo === 'mapa'">
+                            <div class="form-group" ng-if="oCampo.tipo === 'texto'">
+                                <label ng-attr-for="{{ oRegistro.tabla + '_' + oCampo.bd }}" class="text-bold-600">{{ oCampo.titulo }}</label>
+                                <input type="text" class="form-control" ng-attr-id="{{ oRegistro.tabla + '_' + oCampo.bd }}" ng-attr-name="{{ oRegistro.tabla + '_' + oCampo.bd }}" ng-model="oCampo.valor" />
+                            </div>
+                        </li>
+    
+                        <li class="list-group-item" ng-repeat="oCampo in oGrupo.campos" ng-if="oGrupo.tipo === 'mapa' && oGrupo.latitud !== null && oGrupo.longitud !== null && oCampo.bd === 'longitud'">
+                            <div ng-attr-id="{{ oGrupo.contenedor }}" style="width: 100%; height: 400px;">
+                                
+                            </div>
+                        </li>
+    
+                        <li class="list-group-item" ng-if="oGrupo.tipo === 'tabla' && oGrupo.mostrar">
+                            <div class="row" style="padding: 0px; margin: 0px;" ng-repeat="aCampos in oGrupo.filas">
+                                <div ng-class="oGrupo.clase_css" ng-repeat="oCampo in aCampos">
+                                    <div class="form-group" ng-if="oCampo.tipo === 'texto' || oCampo.tipo === 'seleccion_simple_texto_editable' || oCampo.tipo === 'numero' || oCampo.tipo === 'decimal'" ng-attr-id="{{ oCampo.fila }}" ng-show="oCampo.mostrar">
+                                        <label ng-attr-for="{{ oRegistro.tabla + '_' + oCampo.bd }}" class="text-bold-600">{{ oCampo.titulo }}</label>
+                                        <input type="text" class="form-control" ng-if="!oCampo.requerido" ng-attr-id="{{ oRegistro.tabla + '_' + oCampo.bd }}" ng-attr-name="{{ oRegistro.tabla + '_' + oCampo.bd }}" ng-model="oCampo.valor" ng-keyup="ingresaDatos(oRegistro.tabla, oCampo)" />
+                                    </div>
+
+                                    <div class="form-group" ng-if="oCampo.tipo === 'numero'" ng-attr-id="{{ oCampo.fila }}" ng-show="oCampo.mostrar">
+                                        <label ng-attr-for="{{ oRegistro.tabla + '_' + oCampo.bd }}" class="text-bold-600">{{ oCampo.titulo }}</label>
+                                        <input type="text" class="form-control" ng-attr-maxlength="{{oCampo.maxlength}}" ng-attr-minlength="{{oCampo.minlength}}" ng-attr-id="{{ oRegistro.tabla + '_' + oCampo.bd }}" ng-attr-name="{{ oRegistro.tabla + '_' + oCampo.bd }}" ng-model="oCampo.valor" ng-keyup="ingresaDatos(oRegistro.tabla, oCampo)" numeric-only />
+                                    </div>
+
+                                    <div class="form-group" ng-if="oCampo.tipo === 'texto_largo'" ng-attr-id="{{ oCampo.fila }}" ng-show="oCampo.mostrar">
+                                        <label ng-attr-for="{{ oRegistro.tabla + '_' + oCampo.bd }}" class="text-bold-600">{{ oCampo.titulo }}</label>
+                                        <textarea class="form-control" ng-attr-id="{{ oRegistro.tabla + '_' + oCampo.bd }}" ng-attr-name="{{ oRegistro.tabla + '_' + oCampo.bd }}" ng-model="oCampo.valor" />
+                                    </div>
+
+                                    <div class="form-group" ng-if="oCampo.tipo === 'seleccion_simple'" ng-attr-id="{{ oCampo.fila }}" ng-show="oCampo.mostrar">
+                                        <label ng-attr-for="{{ oRegistro.tabla + '_' + oCampo.bd }}" class="text-bold-600">{{ oCampo.titulo }}</label>
+            
+                                        <div class="col-md-12 col-sm-12" style="padding: 0px; margin: 0px;">
+                                            <div class="input-group" style="width: 100%;">
+                                                <ui-select theme="selectize" class="ui-special-group" ng-attr-name="{{ oRegistro.tabla + '_' + oCampo.bd }}" ng-attr-id="{{ oRegistro.tabla + '_' + oCampo.bd }}" ng-model="oCampo.valor" ng-change="seleccionSimple(oRegistro.tabla, oCampo)" style="width: 80%;">
+                                                    <ui-select-match placeholder="Seleccionar">
+                                                        {{ $select.selected.nombre }}
+                                                        <a class="btn btn-xs btn-link pull-right" ng-click="limpiarSelect($event, $select);"><i class="glyphicon glyphicon-remove"></i></a>
+                                                    </ui-select-match>
+                    
+                                                    <ui-select-choices repeat="oOpcion.id as oOpcion in oCampo.aOpcionesLista | filter: $select.search" refresh-delay="0">
+                                                        <div ng-bind-html="oOpcion.nombre | highlight: $select.search"></div>
+                                                    </ui-select-choices>
+                                                </ui-select>
+                                                <span class="input-group-append" style="height: 40px;" ng-click="limpiarSelect(oRegistro.tabla, oCampo)">
+                                                    <button class="btn btn-primary" type="button"><i class="fas fa-broom"></i></button>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+
+                        <li class="list-group-item" ng-repeat="oCampo in oGrupo.campos" ng-if="oGrupo.tipo === 'imagen'">
+                            <h5 class="text-bold-600">{{ oCampo.titulo }}:</h5>
+
+                            <div class="btn-group">
+                                <label class="btn btn-info btn-min-width pointer">
+                                    <input type="file" files-input ng-model="oCampo.adjunto" ng-attr-id="{{ oRegistro.tabla + '_' + oCampo.bd }}" ng-attr-name="{{ oRegistro.tabla + '_' + oCampo.bd }}" class="form-control" ng-attr-tabla="{{ oRegistro.tabla }}" ng-attr-bd="{{ oCampo.bd }}" accept="image/*" capture onchange="angular.element(this).scope().visualizarImagen(event)" tipo="dinamico"/>
+                                    <i class="ft-upload"></i> Seleccionar: 
+                                </label>
+                                <label class="btn btn-light btn-min-width pointer" ng-click="eliminarImagen(oRegistro, oCampo)">
+                                    <i class="ft-trash"></i> Eliminar: 
+                                </label>
+                            </div>
+
+                            <div style="width: 100%; height: 300px; display: none;" ng-attr-id="dvimagen_{{ oRegistro.tabla + '_' + oCampo.bd }}">
+                                <img ng-attr-id="vpimagen_{{ oRegistro.tabla + '_' + oCampo.bd }}" style="max-height: 300px" />
+                            </div>
+
+                            <div style="width: 100%; height: 300px;" ng-if="oCampo.url !== undefined">
+                                <img ng-if="oGrupo.tipo === 'imagen'" ng-attr-src="{{ oCampo.url }}" style="max-height: 300px"  />        
+                            </div>
+                        </li>
+                    </ul>
+    
+    
+    
+                    <!--<ul class="list-group" ng-repeat="oGrupo in oRegistro.grupos">
+                        <li class="list-group-item" ng-repeat="oCampo in oGrupo.campos">
+                            <div ng-if="(oGrupo.campos.length === 1 || oGrupo.tipo === 'mapa') && oGrupo.tipo !== 'imagen'">
+                                <h5 class="text-bold-600">{{ oCampo.titulo }}:</h5>
+                                <input type="text" class="form-control" ng-if="oCampo.tipo === 'texto'" ng-attr-id="{{ oRegistro.tabla + '_' + oCampo.bd }}" ng-attr-name="{{ oRegistro.tabla + '_' + oCampo.bd }}" ng-model="oCampo.valor" />
+                                <textarea class="form-control" ng-if="oCampo.tipo === 'texto_largo'" ng-attr-id="{{ oRegistro.tabla + '_' + oCampo.bd }}" ng-attr-name="{{ oRegistro.tabla + '_' + oCampo.bd }}" ng-model="oCampo.valor" />
+                                <small class="text-muted" ng-if="oCampo.tipo !== 'texto' && oCampo.tipo !== 'texto_largo'">{{ oCampo.valor }}</small>
+                            </div>
+                            <div ng-if="oGrupo.tipo === 'imagen' && oCampo.valor !== null">
+                                <h5 class="text-bold-600">{{ oCampo.titulo }}:</h5>
+                                <img ng-if="oGrupo.tipo === 'imagen'" ng-attr-src="{{ oCampo.valor }}" style="max-height: 300px" />
+                            </div>
+                        </li>
+                        <li class="list-group-item" ng-if="oGrupo.tipo === 'mapa' && oGrupo.latitud !== null && oGrupo.longitud !== null">
+                            <div ng-attr-id="{{ oGrupo.contenedor }}" style="width: 100%; height: 400px;">
+                                
+                            </div>
+                        </li>
+                    </ul>-->
+                </div>
+            </div>
+
+            <div class="col-md-12 col-sm-12 dv-sup">
+                <input type="submit" class="btn btn-info" value="Guardar" />
+            </div>
+        </form>
+    </div>
+</div>

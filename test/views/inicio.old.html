@@ -1,0 +1,45 @@
+<div class="container" ng-controller="inicioController">
+    <div class="col-12 d-flex align-items-center justify-content-center">
+        <div class="table-responsive">
+            <table class="table table-striped table-bordered dt-responsive nowrap" id="tabla-registros" style="width:100%">
+                <thead>
+                    <tr>
+                        <th>Encuesta</th>
+                        <th>Cuenca hidrográfica</th>
+                        <th>Fecha diligenciamiento</th>
+                        <th>Encuestador</th>
+                        <th>Encuestado</th>
+                    </tr>
+                </thead>
+                <tfoot style="display: table-header-group;">
+                    <tr ng-repeat="oRegistro in aRegistrosMuestra">
+                        <td>{{ oRegistro.codigo_encuesta }}</td>
+                        <td>{{ oRegistro.codigo_cuenca_hidrografica }}</td>
+                        <td>{{ oRegistro.fecha_diligenciamiento }}</td>
+                        <td>{{ oRegistro.nombre_encuestador }}</td>
+                        <td>{{ oRegistro.nombre_encuestado }}</td>
+                    </tr>
+                </tfoot>
+                <tbody></tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="col-12 d-flex align-items-center justify-content-center" style="margin-bottom: 15px; text-align: left;">
+        Mostrando registros {{ iDesde }} hasta {{ iHasta }} de un total de  {{ iRegistrosTotales }} 
+    </div>
+
+    <div class="col-12 d-flex align-items-center justify-content-center">
+        <nav aria-label="...">
+            <ul class="pagination">
+                <li ng-class="iPaginaActual === 1 ? 'page-item disabled' : 'page-item pointer'" ng-show="iTotalPaginas > 0" ng-click="paginaAnterior()">
+                    <span class="page-link">Previo</span>
+                </li>
+                <li ng-repeat="oPagina in rangoP" ng-class="oPagina.pagina === iPaginaActual ? 'page-item active pointer' : 'page-item pointer'" ng-click="seleccionaPagina(oPagina.pagina, false)" ng-show="oPagina.mostrar"><span class="page-link">{{ oPagina.pagina }}</span></li>
+                <li ng-class="iPaginaActual === iTotalPaginas ? 'page-item disabled' : 'page-item pointer'" ng-show="iTotalPaginas > 0" ng-click="paginaSiguiente()">
+                    <span class="page-link">Siguiente</span>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</div>

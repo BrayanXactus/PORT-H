@@ -1,0 +1,13 @@
+table {
+    width: 100%;
+    border: 1px solid #EEEEEE;
+}
+
+table thead th {
+    background: #2c3e50;
+    color: #ffffff;
+}
+
+table tr:nth-child(even) {
+    background: #EEEEEE;
+}

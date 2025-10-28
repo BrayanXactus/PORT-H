@@ -1,0 +1,70 @@
+angular.module(APPNAME).controller('sesionController', function($scope, $scope, $location, $http, configuracionGlobal, servicioGeneral) {
+    $scope.iniciarSesion = function () {
+        $scope.sErrorLogin = '';
+
+        $http({
+            'method': 'POST',
+            'async': true,
+            'url': configuracionGlobal.URL + 'php/ControlEncuestas.php',
+            'data': $scope.oLogin,
+            'headers': {
+                'Content-type': 'application/json'
+            }
+        }).then(function (success) {
+			$scope.oSession = success.data;
+            $scope.configurarSesionLogin();
+        }, function (error) {
+            
+        });
+    };
+
+    $scope.cerrarSesion = function () {
+        $http({
+            'method': 'POST',
+            'async': true,
+            'url': configuracionGlobal.URL + 'php/ControlEncuestas.php',
+            'data': { "method": "cerrarSesion" },
+            'headers': {
+                'Content-type': 'application/json'
+            }
+        }).then(function (success) {
+			$scope.form = 'sesion';
+            window.sessionStorage.setItem('form', $scope.form);
+            $scope.bMostrarEncabezado = false;
+            $scope.sShowForm = 'views/sesion.html?i=' + Math.random().toString(36).slice(2);
+        }, function (error) {
+            
+        });
+    }
+
+    $scope.configurarSesionLogin = function () {
+        if ($scope.oSession.bLogin) {
+            $location.url("/inicio");
+        } else {
+            $scope.oLogin.contrasenia = null;
+            
+            toastr.options = {
+                closeButton: false,
+                debug: false,
+                newestOnTop: false,
+                progressBar: false,
+                positionClass: "toast-top-right",
+                preventDuplicates: false,
+                onclick: null,
+                showDuration: 300,
+                hideDuration: 1000,
+                timeOut: 5000,
+                warning: false,
+                extendedTimeOut: "1000",
+                showEasing: "swing",
+                hideEasing: "linear",
+                showMethod: "fadeIn",
+                hideMethod: "fadeOut"
+            };
+
+            toastr.error("Datos de acceso inválidos", "Error");
+        }
+    }
+
+    $scope.oLogin = { 'correo' : null, 'contrasenia' : null, 'method' : 'iniciarSesion' };
+});

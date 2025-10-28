@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generalidades del Censo - Software Censo de Usuarios del Recurso Hídrico</title>
+    <style>
+        body {
+            font-family: 'Open Sans', 'Quicksand', sans-serif;
+            margin: 0 !important;
+            padding: 0 !important;
+            background-color: #f4f4f4;
+            text-align: center;
+        }
+        .generalidades-body{
+            width: 100%;
+            min-height: 100vh;
+        }
+        .container-generalidades {
+            background-color: #0c4a6e;
+            padding: 20px;
+            color: white;
+            width: 100%;
+            min-height: 100vh;
+            gap: 30px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            box-sizing: border-box;
+        }
+        h1 {
+            margin: 10px 0 30px 0;
+            font-size: 30px;
+            color: white;
+            font-weight: 700;
+        }
+        @media (max-width: 1000px) {
+            h1 {
+                font-size: 26px;
+            }
+        }
+        .cuencas-container {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            width: 100%;
+            margin-top: 20px;
+            flex-wrap: wrap;
+            padding: 0 15px;
+            margin-bottom: 40px;
+        }
+        .cuenca-button {
+            background-color: #0C4A6E;
+            padding: 15px;
+            border-radius: 10px;
+            width: calc(20% - 16px); 
+            min-width: 150px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 20px;
+            border: 2px solid transparent;
+        }
+        .cuenca-button:hover {
+            transform: scale(1.05);
+        }
+        .cuenca-button.seleccionada {
+            background-color: rgba(255, 165, 0, 0.3);
+            border: 2px solid orange;
+            transform: scale(1.05);
+        }
+        .cuenca-button img {
+            width: 190px;
+            border-radius: 50%;
+            display: block;
+            margin: 0 auto 10px;
+            background-color: white;
+        }
+        .cuenca-button span {
+            display: block;
+            font-size: 16px;
+            font-weight: bold;
+            color: #0C4A6E;
+            background-color: white;
+            padding: 10px 0;
+            margin: 0 35px;
+            border-radius: 8px;
+        }
+        .buttons-navigation {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 20px;
+        }
+        .button-nav {
+            padding: 12px 25px;
+            border-radius: 8px;
+            font-weight: bold;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+            font-size: 16px;
+        }
+        .button-primary {
+            background-color: #28a745;
+            color: white;
+        }
+        .button-primary:hover {
+            background-color: #218838;
+        }
+        .button-primary:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+        .button-secondary {
+            background-color: #666;
+            color: white;
+        }
+        .button-secondary:hover {
+            background-color: #555;
+        }
+        .loading-text {
+            margin-top: 20px;
+            color: yellow;
+            font-size: 18px;
+        }
+        @media (max-width: 1400px) {
+            .cuenca-button {
+                width: calc(25% - 15px); 
+            }
+        }
+        @media (max-width: 1200px) {
+            .cuenca-button span {
+                margin: 0 3%;
+            }
+        }
+        @media (max-width: 992px) {
+            .cuenca-button {
+                width: calc(50% - 15px);
+            }
+        }
+        @media (max-width: 576px) {
+            .cuenca-button {
+                width: 100%;
+            }
+        }
+        .header-navbar{
+            display: none;
+        }
+    </style>
+</head>
+<body ng-controller="generalidadesController" class="generalidades-body">
+    <div class="container-generalidades">
+        
+        <h1>Favor seleccione la Cuenca Hídrica de su interés:</h1>
+        
+        <div class="cuencas-container">
+            <div ng-repeat="cuenca in cuencas track by cuenca.id" 
+                 ng-if="cuenca"
+                 ng-click="seleccionarCuenca(cuenca)"
+                 class="cuenca-button"
+                 ng-class="{'seleccionada': cuenca.seleccionada}">
+                
+                <!-- Mostrar imagen solo para Río Bogotá -->
+                <img ng-if="cuenca.id === 'bogota'" src="image/MAPSecond.png" alt="Cuenca Río Bogotá">
+                
+                <!-- Círculo vacío para todos los demás ríos -->
+                <img ng-if="cuenca.id !== 'bogota'" src="image/MAPSecondEmpty.png" alt="Cuenca Río Bogotá">
+                
+                <span>{{ cuenca.nombre || 'Sin nombre' }}</span>
+            </div>
+        </div>
+        
+        <!-- <div class="buttons-navigation">
+            <button ng-click="volverHome()" 
+                    class="button-nav button-secondary">
+                Volver al Menú
+            </button>
+            
+            <button ng-click="continuarSeleccion()" 
+                    ng-disabled="!tieneCuencaSeleccionada()"
+                    class="button-nav button-primary">
+                Continuar
+            </button>
+        </div> -->
+        
+        <div ng-if="cuencas.length === 0" class="loading-text">
+            Cargando cuencas...
+        </div>
+    </div>
+    
+</body>
+</html>

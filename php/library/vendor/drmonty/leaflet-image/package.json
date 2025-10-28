@@ -1,0 +1,18 @@
+{
+    "name": "drmonty-leaflet-image",
+    "description": "export leaflet maps as images",
+    "homepage": "http://mapbox.github.io/leaflet-image",
+    "version": "0.4.0",
+    "author": {
+        "name": "Tom MacWright",
+        "url": "http://www.macwright.org/"
+    },
+    "main": "js/leaflet-image.js",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/mrohnstock/leaflet-image.git"
+    },
+    "dependencies": {
+        "jquery": "*"
+    }
+}

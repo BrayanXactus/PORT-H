@@ -1,0 +1,438 @@
+<!-- ABIERTA.HTML — Versión con estilos unificados (con logos en las métricas) -->
+<nav class="navbar navbar-expand-lg bg-body-tertiary abierta-nav abiert-bg">
+  <style>
+    /* =========================
+       THEME TOKENS (REUTILIZA)
+       ========================= */
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap');
+
+    :root{
+      /* Colores base */
+      --brand-primary: #197091;
+      --brand-primary-700: #0f506a;
+      --brand-dark: #0b3356;
+      --brand-accent: #c1d044;
+      --brand-bg: #f7fbff;
+      --brand-muted: #6c757d;
+      --brand-white: #ffffff;
+
+      /* Tipografía y ritmos */
+      --font-family: 'Inter', system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+      --fs-xxl: clamp(28px, 3.8vw, 40px);
+      --fs-xl: clamp(22px, 3vw, 32px);
+      --fs-lg: 18px;
+      --fs-md: 15px;
+      --fs-sm: 12px;
+
+      /* Layout */
+      --radius-lg: 14px;
+      --radius-md: 10px;
+      --shadow-sm: 0 4px 12px rgba(25,112,145,.10);
+      --shadow-md: 0 6px 18px rgba(25,112,145,.12);
+      --section-divider: 3px dashed var(--brand-accent);
+      --container-max: 97%;
+      --container-pad: 30px;
+    }
+
+    /* =========================
+       RESETEOS Y BASE
+       ========================= */
+    html, body { font-family: var(--font-family); color: var(--brand-dark); }
+    .text-brand { color: var(--brand-primary) !important; }
+    .bg-brand  { background: var(--brand-primary) !important; color: var(--brand-white) !important; }
+
+    /* Visibilidad del reporte */
+    #reporte { visibility: hidden; transition: visibility .3s ease; }
+    #reporte.loaded { visibility: visible; }
+
+    /* =========================
+       NAVBAR: Selector Subzona
+       ========================= */
+    .subzona-dd .dd-label{
+      display:block; font-size:var(--fs-sm); color:#5b89a3; letter-spacing:.3px;
+      margin-bottom:2px; text-transform:uppercase; font-weight:700;
+    }
+    .subzona-dd .dd-value, .subzona-dd .dd-placeholder{
+      display:block; font-size:var(--fs-md); font-weight:600; color:var(--brand-dark);
+      max-width:42vw; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+    }
+    .subzona-dd .dd-placeholder{ color:var(--brand-muted); font-weight:500; }
+    .navbar .dropdown-menu{ max-height:60vh; overflow:auto; }
+
+    /* =========================
+       ENCABEZADO DEL REPORTE
+       ========================= */
+    .report-header{ padding: var(--container-pad); color: var(--brand-primary) !important; }
+    .report-title{
+      font-size: var(--fs-xl); font-weight:800; margin:0 0 6px 0; color:var(--brand-dark);
+      line-height:1.2; word-break:break-word;
+    }
+    .report-subtitle{ font-size: var(--fs-lg); font-weight:700; margin:0 0 10px 0; color:var(--brand-primary); }
+    .report-divider{ height:2px; width:100%; max-width:420px; background:var(--brand-primary); opacity:.25; }
+
+    /* =========================
+       CONTENEDORES / SECCIONES
+       ========================= */
+    .section-container{
+      width:100%; max-width:var(--container-max); margin:0 auto; padding:0 var(--container-pad); box-sizing:border-box;
+    }
+    .filters-wrap{ width:100%; margin:16px auto 10px auto; }
+
+    /* =========================
+       TARJETAS DE MÉTRICAS
+       ========================= */
+    .stats-row{
+      display:flex; flex-wrap:wrap; justify-content:center; gap:14px;
+      margin-top:24px; margin-bottom:30px; padding-bottom:20px;
+      border-bottom: var(--section-divider);
+    }
+    .stat-card{
+      width:160px; min-height:120px;
+      background: linear-gradient(180deg, var(--brand-white), var(--brand-bg));
+      border:1px solid rgba(25,112,145,.18);
+      border-radius:var(--radius-lg);
+      box-shadow: var(--shadow-md);
+      display:flex; flex-direction:column; align-items:center; justify-content:center;
+      transition: transform .18s ease, box-shadow .18s ease, background .18s ease;
+      text-align:center; padding:10px;
+    }
+    .stat-card:hover{ transform: translateY(-2px); box-shadow: 0 10px 22px rgba(25,112,145,.16); }
+    .stat-icon{
+      width:42px; height:42px; border-radius:50%;
+      display:grid; place-items:center; margin-bottom:8px;
+      background: rgba(25,112,145,.09); color:var(--brand-primary); font-size:20px;
+      overflow:hidden; /* mantiene el círculo perfecto con logos */
+    }
+    .stat-value{ font-size:22px; font-weight:800; color:var(--brand-dark); line-height:1.05; }
+    .stat-label{ font-size:12px; letter-spacing:.6px; margin-top:6px; color:var(--brand-primary); font-weight:700; }
+
+    /* ===== Logos dentro de las tarjetas (mismo círculo gris) ===== */
+    .stat-icon.logo{ padding:6px; }
+    .stat-icon.logo img{
+      width:100%; height:100%; object-fit:contain; display:block;
+      user-select:none; pointer-events:none;
+    }
+
+    /* =========================
+       BOTONERA DE GRÁFICAS
+       ========================= */
+    .graf-nav{ width:100%; margin-bottom:15px; }
+    .graf-nav .btn{
+      flex:1; text-align:center; border-radius:0; transition:all .3s;
+      background:#f8f9fa; color:var(--brand-primary) !important; border-color:var(--brand-primary) !important;
+      font-weight:600;
+    }
+    .graf-nav .btn.active,
+    .graf-nav .btn:focus,
+    .graf-nav .btn:active{
+      background:var(--brand-primary) !important; color:var(--brand-white) !important;
+      border-color:var(--brand-primary) !important; box-shadow:none !important;
+    }
+    .graf-nav .btn:first-child{ border-top-left-radius:.25rem; border-bottom-left-radius:.25rem; }
+    .graf-nav .btn:last-child{  border-top-right-radius:.25rem; border-bottom-right-radius:.25rem; }
+
+    /* =========================
+       BLOQUES DE CONTENIDO
+       ========================= */
+    .section-split{
+      padding-top:30px; padding-bottom:30px; margin-bottom:30px; border-bottom: var(--section-divider);
+    }
+    .section-title{
+      font-size: var(--fs-xxl); color: var(--brand-primary); font-weight:800; letter-spacing:.4px;
+      text-align:center; margin: 0 0 10px 0;
+    }
+
+    /* =========================
+       TABLAS / TEXTO / IMÁGENES
+       ========================= */
+    #reporte table{ margin-left:auto !important; margin-right:auto !important; }
+    #reporte table th, #reporte table td{ text-align:center !important; vertical-align:middle !important; }
+    #reporte .table-responsive{ display:block; width:100%; overflow-x:auto; }
+
+    .info-splash-screen{
+      background-color:#0c4a6e; color:#fff; display:flex; align-items:center; justify-content:center; padding:30px 40px;
+    }
+    .info-splash-screen .splash-title{ font-size:28px; font-weight:700; margin-bottom:14px; line-height:1.25; }
+    .info-splash-screen .splash-description{ font-size:18px; line-height:1.7; text-align:justify; }
+    .info-splash-screen .splash-description p{ margin:0 0 12px 0; }
+    .info-splash-screen h3{ font-size:22px; text-align:left; color:#fff; font-weight:800; margin-top:22px; }
+
+    .censo-cifras{ display:flex; justify-content:center; align-items:center; flex-direction:column; margin-top:20px; gap:10px; }
+    .censo-cifras img{ width: clamp(600px, 70%, 1100px); max-width:100%; height:auto; }
+
+    /* =========================
+       BOTÓN IMPRIMIR
+       ========================= */
+    .btn-brand{
+      background: var(--brand-primary); color: var(--brand-white);
+      border-color: var(--brand-primary); font-weight:700;
+    }
+    .btn-brand:hover{ background: var(--brand-primary-700); border-color: var(--brand-primary-700); }
+  </style>
+
+  <div class="container-fluid">
+    <a class="navbar-brand" href="#" aria-label="Inicio">
+      <span class="nav-link pointer"><i class="la la-home"></i><span></span>
+    </a>
+
+    <form class="d-flex">
+      <div class="collapse navbar-collapse" id="navbarScroll">
+        <ul class="navbar-nav mr-auto my-2 my-lg-0 navbar-nav-scroll" style="max-height: 100px;">
+          <li class="nav-item dropdown" style="float:left;">
+            <a class="nav-link dropdown-toggle subzona-dd"
+               href="#!/abierta" role="button" data-toggle="dropdown" aria-expanded="false"
+               title="{{ oFiltro.descripcion || 'Subzona Hidrográfica' }}">
+              <span class="dd-label">Subzona Hidrográfica</span>
+              <span class="dd-value" ng-if="oFiltro.descripcion">Rio Bogotá</span>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </form>
+  </div>
+</nav>
+
+<div id="reporte" style="margin-right: 35px; margin-left: 35px; margin-top: 35px; margin-bottom: 35px;">
+  <div class="row reporte-100">
+    <div class="col-md-12 report-header">
+      <div ng-show="oFiltro.descripcion">
+        <h1 class="report-title">Cuenca del Rio Bogotá</h1>
+        <div class="report-subtitle">Subzona Hidrográfica</div>
+        <div class="report-divider"></div>
+      </div>
+      <div ng-show="!oFiltro.descripcion">
+        <h1 class="report-title">Cuenca del Rio Bogotá</h1>
+        <div class="report-subtitle">Subzona Hidrográfica</div>
+        <div class="report-divider"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== Sección 2: Mapa + Filtros (mismo ancho) ===== -->
+  <div class="row" id="seccion2">
+    <div class="section-container">
+      <div id="mapa2" style="height: 90vh;"></div>
+
+      <div class="filters-wrap">
+        <div class="row g-3">
+          <div class="form-group col-md-6">
+            <label for="modulo" class="form-label">Módulo</label>
+            <select id="modulo" name="modulo"></select>
+          </div>
+          <div class="form-group col-md-6">
+            <label for="subzona-hidrografica" class="form-label">Subzona hidrográfica</label>
+            <select id="subzona-hidrografica" name="subzona-hidrografica"></select>
+          </div>
+          <div class="form-group col-md-6">
+            <label for="unidad-hidrografica-nivel-1" class="form-label">Unidad hidrográfica nivel I</label>
+            <select id="unidad-hidrografica-nivel-1" name="unidad-hidrografica-nivel-1"></select>
+          </div>
+          <div class="form-group col-md-6">
+            <label for="unidad-hidrografica-nivel-2" class="form-label">Unidad hidrográfica nivel II</label>
+            <select id="unidad-hidrografica-nivel-2" name="unidad-hidrografica-nivel-2"></select>
+          </div>
+          <div class="form-group col-md-6">
+            <label for="departamento" class="form-label">Departamento</label>
+            <select id="departamento" name="departamento"></select>
+          </div>
+          <div class="form-group col-md-6">
+            <label for="municipio" class="form-label">Municipio</label>
+            <select id="municipio" name="municipio"></select>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== Tarjetas métricas ===== -->
+  <div class="row reporte-100">
+    <div class="col-md-12 report-header">
+      <div ng-show="oFiltro.descripcion">
+        <h1 class="report-title">Captaciones Vertimientos Ocupaciones</h1>
+        <div class="report-divider"></div>
+      </div>
+      <div ng-show="!oFiltro.descripcion">
+        <h1 class="report-title">Captaciones Vertimientos Ocupaciones</h1>
+        <div class="report-divider"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="stats-row">
+    <!-- CAPTACIONES -->
+    <div class="stat-card">
+      <div class="stat-icon logo">
+        <img src="../image/LOGO%20CAPTACIONES.png" alt="Logo Captaciones" loading="lazy">
+      </div>
+      <div class="stat-value">
+        <span ng-show="oFiltro.captaciones >= 1000">{{ (oFiltro.captaciones) }}</span>
+        <span ng-show="oFiltro.captaciones < 1000">{{ oFiltro.captaciones }}</span>
+      </div>
+      <div class="stat-label">CAPTACIONES</div>
+    </div>
+
+    <!-- VERTIMIENTOS -->
+    <div class="stat-card">
+      <div class="stat-icon logo">
+        <img src="../image/LOGO%20VERTIMIENTOS.png" alt="Logo Vertimientos" loading="lazy">
+      </div>
+      <div class="stat-value">
+        <span ng-show="oFiltro.vertimiento >= 1000">{{ oFiltro.vertimiento }}</span>
+        <span ng-show="oFiltro.vertimiento < 1000">{{ oFiltro.vertimiento }}</span>
+      </div>
+      <div class="stat-label">VERTIMIENTOS</div>
+    </div>
+
+    <!-- OCUPACIONES (OCUPACIÓN DE CAUCE) -->
+    <div class="stat-card">
+      <div class="stat-icon logo">
+        <img src="../image/LOGO%20OCUPACI%C3%93N%20DE%20CAUCE.png" alt="Logo Ocupación de Cauce" loading="lazy">
+      </div>
+      <div class="stat-value">
+        <span ng-show="oFiltro.ocupacion >= 1000">{{ oFiltro.ocupacion }}</span>
+        <span ng-show="oFiltro.ocupacion < 1000">{{ oFiltro.ocupacion }}</span>
+      </div>
+      <div class="stat-label">OCUPACIONES</div>
+    </div>
+
+    <!-- MINERA (ACTIVIDAD MINERA) -->
+    <div class="stat-card">
+      <div class="stat-icon logo">
+        <img src="../image/LOGO%20ACTIVIDAD%20MINERA.png" alt="Logo Actividad Minera" loading="lazy">
+      </div>
+      <div class="stat-value">
+        <span ng-show="oFiltro.minera >= 1000">{{ oFiltro.minera }}</span>
+        <span ng-show="oFiltro.minera < 1000">{{ oFiltro.minera }}</span>
+      </div>
+      <div class="stat-label">MINERA</div>
+    </div>
+
+    <!-- TOTAL -->
+    <div class="stat-card">
+      <div class="stat-icon logo">
+        <img src="../image/LOGO%20TOTAL.png" alt="Logo Total" loading="lazy">
+      </div>
+      <div class="stat-value">
+        <span ng-show="oFiltro.total >= 1000">{{ oFiltro.total }}</span>
+        <span ng-show="oFiltro.total < 1000">{{ oFiltro.total }}</span>
+      </div>
+      <div class="stat-label">TOTAL</div>
+    </div>
+  </div>
+
+  <!-- ===== Navegación de gráficas ===== -->
+  <div class="row" style="padding-top:10px; padding-bottom:10px; margin-bottom:10px;">
+    <div class="col-md-12">
+      <div class="btn-group graf-nav" role="group" aria-label="Navegación de gráficas">
+        <button type="button" class="btn btn-outline-primary active" ng-click="cambiarGrafica(1)">Captaciones y usos</button>
+        <button type="button" class="btn btn-outline-primary" ng-click="cambiarGrafica(2)">Vertimientos</button>
+        <button type="button" class="btn btn-outline-primary" ng-click="cambiarGrafica(3)">Ocupaciones</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== Gráficas ===== -->
+  <div class="row section-split">
+    <div class="col-md-12" style="width:100%; display:flex; justify-content:center;">
+      <div id="grafico-container-1" style="width:100%; display:block;"><canvas id="grafico-captacion"></canvas></div>
+      <div id="grafico-container-2" style="width:100%; display:none;"><canvas id="grafico-vertimiento"></canvas></div>
+      <div id="grafico-container-3" style="width:100%; display:none;"><canvas id="grafico-ocupacion"></canvas></div>
+    </div>
+  </div>
+
+  <!-- ===== Sección 4: mapa 3 + leyenda ===== -->
+  <div class="row reporte-100">
+    <div class="col-md-12 report-header">
+      <div ng-show="oFiltro.descripcion">
+        <h1 class="report-title">DISTRIBUCIÓN ESPACIAL DE LA DEMANDA HÍDRICA — MAPA DE CALOR</h1>
+        <div class="report-divider"></div>
+      </div>
+      <div ng-show="!oFiltro.descripcion">
+        <h1 class="report-title">DISTRIBUCIÓN ESPACIAL DE LA DEMANDA HÍDRICA — MAPA DE CALOR</h1>
+        <div class="report-divider"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row section-split" id="seccion4">
+    <div class="col-md-8" id="mapa3" style="height: 400px;"></div>
+    <div class="col-md-4" style="display:flex; gap:10px; flex-wrap:wrap; align-content:flex-start;">
+      <div style="height:90px; width:90px; background-color:#c1d043; border-radius:50%; display:flex; justify-content:center; align-items:center;"> &gt; 100 </div>
+      <div style="height:80px; width:80px; background-color:#197091; border-radius:50%; display:flex; justify-content:center; align-items:center;"> 100 - 10 </div>
+      <div style="height:70px; width:70px; background-color:#29a398; border-radius:50%; display:flex; justify-content:center; align-items:center;"> 10 - 3 </div>
+      <div style="height:60px; width:60px; background-color:#3699c4; border-radius:50%; display:flex; justify-content:center; align-items:center;"> 3 - 1 </div>
+      <div style="height:50px; width:50px; background-color:#7d7174; border-radius:50%; display:flex; justify-content:center; align-items:center;"> &lt; 1 </div>
+    </div>
+  </div>
+
+  <!-- ===== Sección 5: tabla + línea ===== -->
+  <div class="row reporte-100">
+    <div class="col-md-12 report-header">
+      <div ng-show="oFiltro.descripcion">
+        <h1 class="report-title">Grandes Usuarios y su Demanda</h1>
+        <div class="report-divider"></div>
+      </div>
+      <div ng-show="!oFiltro.descripcion">
+        <h1 class="report-title">Grandes Usuarios y su Demanda</h1>
+        <div class="report-divider"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row section-split" id="seccion5">
+    <div class="col-md-12">
+      <div class="table-responsive">
+        <table class="table table-striped">
+          <thead>
+            <tr><th>Grandes Usuarios</th><th>Demanda (l/s)</th></tr>
+          </thead>
+          <tbody>
+            <tr ng-repeat="usuario in grandesUsuarios">
+              <td>{{ usuario.nombre }}</td>
+              <td>{{ usuario.demanda }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="row reporte-100">
+      <div class="col-md-12 report-header">
+        <div ng-show="oFiltro.descripcion">
+          <h1 class="report-title">Índices de uso del agua</h1>
+          <div class="report-divider"></div>
+        </div>
+        <div ng-show="!oFiltro.descripcion">
+          <h1 class="report-title">Índices de uso del agua</h1>
+          <div class="report-divider"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-12" style="margin-top: 30px;">
+      <div id="mapa-uhn" style="height: 400px; width: 100%; border:1px solid #e9ecef; border-radius:8px;"></div>
+    </div>
+  </div>
+
+  <!-- ===== Sección 6: doughnut ===== -->
+  <div class="row section-split" id="seccion6">
+    <div class="col-md-6 offset-md-3" style="padding: 30px; color: var(--brand-primary) !important;">
+      <p class="section-title" style="margin-bottom: 0;">DEMANDA HÍDRICA POR SECTOR</p>
+    </div>
+    <div class="col-md-6 offset-md-3">
+      <canvas id="grafico-demanda-hidrica"></canvas>
+    </div>
+  </div>
+
+  <!-- ===== Splash de información (HTML inyectado) ===== -->
+  <div class="row info-splash-screen">
+    <div class="col-12">
+      <p class="splash-title" ng-bind-html="textoActual.titulo"></p>
+      <div class="splash-description" ng-bind-html="textoActual.descripcion"></div>
+    </div>
+  </div>
+</div>
+
+<div class="row" id="exportar" style="padding-top: 30px; padding-bottom: 30px; margin-bottom: 30px; margin-left:30px;">
+  <button type="button" class="btn btn-brand" ng-click="exportarPDF()">Imprimir</button>
+</div>

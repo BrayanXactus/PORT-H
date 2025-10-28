@@ -1,0 +1,36 @@
+<div class="container" id="sesion">
+    <div class="col-12 d-flex align-items-center justify-content-center">
+        <div class="col-lg-4 col-md-8 col-10 box-shadow-2 p-0">
+            <div class="card border-grey border-lighten-3 m-0">
+                <div class="card-header border-0">
+                    <div class="card-title text-center">
+                        <div class="p-1"><img src="assets/image/logo1.png" style="max-height: 60px;" alt="branding logo"></div>
+                    </div>
+                    <h6 class="card-subtitle line-on-side text-muted text-center font-small-3 pt-2"><span>Iniciar sesión</span></h6>
+                </div>
+                <div class="card-content">
+                    <div class="card-body">
+                        <form class="form-horizontal form-simple" ng-submit="iniciarSesion()">
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="fas fa-user"></i></span>
+                                <input id="correo" type="mail" class="form-control" name="correo" ng-model="oLogin.correo" placeholder="Correo electrónico">
+                            </div>
+
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="fas fa-key"></i></span>
+                                <input id="contrasenia" type="password" class="form-control" name="contrasenia" ng-model="oLogin.contrasenia" placeholder="Contraseña">
+                            </div>
+                            
+                            <div class="form-group row" style="margin-top: 20px;">
+                                <div class="col-sm-6 col-12">
+                                    <button type="submit" class="btn btn-primary">Acceder</button>
+                                </div>
+                                <div class="col-sm-6 col-12 text-center text-sm-right"><span class="card-link pointer">¿Olvidó su contraseña?</span></div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

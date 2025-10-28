@@ -1,0 +1,292 @@
+<!-- ABIERTA (MAPA 1) — Estilos unificados -->
+<nav class="navbar navbar-expand-lg bg-body-tertiary abierta-nav abiert-bg">
+  <style>
+    /* =========================
+       THEME TOKENS (REUTILIZA)
+       ========================= */
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap');
+
+    :root{
+      /* Colores base */
+      --brand-primary: #197091;
+      --brand-primary-700: #0f506a;
+      --brand-dark: #0b3356;
+      --brand-accent: #c1d044;
+      --brand-bg: #f7fbff;
+      --brand-muted: #6c757d;
+      --brand-white: #ffffff;
+
+      /* Tipografía y ritmos */
+      --font-family: 'Inter', system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+      --fs-xxl: clamp(28px, 3.8vw, 40px);
+      --fs-xl: clamp(22px, 3vw, 32px);
+      --fs-lg: 18px;
+      --fs-md: 15px;
+      --fs-sm: 12px;
+
+      /* Layout */
+      --radius-lg: 14px;
+      --radius-md: 10px;
+      --shadow-sm: 0 4px 12px rgba(25,112,145,.10);
+      --shadow-md: 0 6px 18px rgba(25,112,145,.12);
+      --section-divider: 3px dashed var(--brand-accent);
+      --container-max: 97%;
+      --container-pad: 30px;
+    }
+
+    /* =========================
+       RESETEOS Y BASE
+       ========================= */
+    html, body { font-family: var(--font-family); color: var(--brand-dark); }
+    .text-brand { color: var(--brand-primary) !important; }
+    .bg-brand  { background: var(--brand-primary) !important; color: var(--brand-white) !important; }
+
+    /* Visibilidad del reporte */
+    #reporte { visibility: hidden; transition: visibility .3s ease; }
+    #reporte.loaded { visibility: visible; }
+
+    /* =========================
+       NAVBAR: Selector Subzona
+       ========================= */
+    .subzona-dd .dd-label{
+      display:block; font-size:var(--fs-sm); color:#5b89a3; letter-spacing:.3px;
+      margin-bottom:2px; text-transform:uppercase; font-weight:700;
+    }
+    .subzona-dd .dd-value, .subzona-dd .dd-placeholder{
+      display:block; font-size:var(--fs-md); font-weight:600; color:var(--brand-dark);
+      max-width:42vw; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+    }
+    .subzona-dd .dd-placeholder{ color:var(--brand-muted); font-weight:500; }
+    .navbar .dropdown-menu{ max-height:60vh; overflow:auto; }
+
+    /* =========================
+       ENCABEZADO DEL REPORTE
+       ========================= */
+    .report-header{ padding: var(--container-pad); color: var(--brand-primary) !important; }
+    .report-title{
+      font-size: var(--fs-xl); font-weight:800; margin:0 0 6px 0; color:var(--brand-dark);
+      line-height:1.2; word-break:break-word;
+    }
+    .report-subtitle{ font-size: var(--fs-lg); font-weight:700; margin:0 0 10px 0; color:var(--brand-primary); }
+    .report-divider{ height:2px; width:100%; max-width:420px; background:var(--brand-primary); opacity:.25; }
+
+    /* =========================
+       TARJETAS DE MÉTRICAS
+       ========================= */
+    .stats-row{
+      padding-top: 10px; padding-bottom: 10px; margin-bottom: 18px;
+      display:flex; flex-wrap:wrap; justify-content:center; gap:14px;
+      border-bottom: var(--section-divider);
+    }
+
+    /* --- AJUSTES SOLICITADOS: más anchas + icono a la izquierda --- */
+    .stat-card{
+      width: 240px;            /* antes 160px */
+      min-height: 90px;        /* antes 120px */
+      background: linear-gradient(180deg, var(--brand-white), var(--brand-bg));
+      border:1px solid rgba(25,112,145,.18);
+      border-radius:var(--radius-lg);
+      box-shadow: var(--shadow-md);
+      transition: transform .18s ease, box-shadow .18s ease, background .18s ease;
+
+      /* grid: icono a la izquierda, textos a la derecha */
+      display: grid;
+      grid-template-columns: 50px 1fr;  /* col 1 icono | col 2 textos */
+      grid-template-rows: auto auto;    /* fila 1 valor | fila 2 etiqueta */
+      align-items: center;
+      column-gap: 12px;
+      text-align: left;                 /* textos alineados a la izquierda */
+      padding: 12px 14px;
+    }
+    .stat-card:hover{ transform: translateY(-2px); box-shadow: 0 10px 22px rgba(25,112,145,.16); }
+
+    .stat-icon{
+      width:42px; height:42px; border-radius:50%;
+      display:grid; place-items:center; margin:0;
+      background: rgba(25,112,145,.09); color:var(--brand-primary); font-size:20px;
+      grid-row: 1 / span 2;
+      overflow:hidden; /* mantiene el círculo perfecto con imágenes */
+    }
+    .stat-value{
+      font-size:24px; font-weight:800; color:var(--brand-dark); line-height:1.05;
+    }
+    .stat-label{
+      font-size:12px; letter-spacing:.6px; margin-top:2px; color:var(--brand-primary); font-weight:700;
+    }
+
+    /* Responsivo: en móviles ocupan todo el ancho */
+    @media (max-width: 576px){
+      .stat-card{ width:100%; }
+    }
+
+    /* =========================
+       BOTONERA DE GRÁFICAS
+       ========================= */
+    .graf-nav{ width:100%; margin-bottom:15px; }
+    .graf-nav .btn{
+      flex:1; text-align:center; border-radius:0; transition:all .3s;
+      background:#f8f9fa; color:var(--brand-primary) !important; border-color:var(--brand-primary) !important;
+      font-weight:600;
+    }
+    .graf-nav .btn.active,
+    .graf-nav .btn:focus,
+    .graf-nav .btn:active{
+      background:var(--brand-primary) !important; color:var(--brand-white) !important;
+      border-color:var(--brand-primary) !important; box-shadow:none !important;
+    }
+    .graf-nav .btn:first-child{ border-top-left-radius:.25rem; border-bottom-left-radius:.25rem; }
+    .graf-nav .btn:last-child{  border-top-right-radius:.25rem; border-bottom-right-radius:.25rem; }
+
+    /* =========================
+       TABLAS / TEXTO / IMÁGENES
+       ========================= */
+    #reporte table{ margin-left:auto !important; margin-right:auto !important; }
+    #reporte table th, #reporte table td{ text-align:center !important; vertical-align:middle !important; }
+    #reporte .table-responsive{ display:block; width:100%; overflow-x:auto; }
+
+    .info-splash-screen{
+      background-color:#0c4b6e; color:#fff; display:flex; align-items:center; justify-content:center;
+      padding:30px 40px;
+    }
+    .info-splash-screen .splash-title{ font-size:28px; font-weight:700; margin-bottom:14px; line-height:1.25; }
+    .info-splash-screen .splash-description{ font-size:18px; line-height:1.7; text-align:justify; }
+    .info-splash-screen .splash-description p{ margin:0 0 12px 0; }
+    .info-splash-screen h3{ font-size:22px; text-align:left; color:#fff; font-weight:800; margin-top:22px; }
+
+    .censo-cifras{ display:flex; justify-content:center; align-items:center; flex-direction:column; margin-top:20px; gap:10px; }
+    .censo-cifras img{ width: clamp(600px, 70%, 1100px); max-width:100%; height:auto; }
+  
+    /* ===== Logos dentro de las tarjetas (con el mismo círculo) ===== */
+    .stat-icon.logo{ padding:6px; } /* espacio interno para que el logo 'respire' */
+    .stat-icon.logo img{
+      width:100%; height:100%; object-fit:contain; display:block;
+      user-select:none; pointer-events:none;
+    }
+  </style>
+
+  <div class="container-fluid">
+    <a class="navbar-brand" href="#">
+      <span class="nav-link pointer"><i class="la la-home"></i></span>
+    </a>
+    <form class="d-flex">
+      <div class="collapse navbar-collapse" id="navbarScroll">
+        <ul class="navbar-nav mr-auto my-2 my-lg-0 navbar-nav-scroll" style="max-height: 100px;">
+          <li class="nav-item dropdown" style="float:left;">
+            <a class="nav-link dropdown-toggle subzona-dd" href="#!/abierta" role="button" data-toggle="dropdown" aria-expanded="false"
+               title="{{ oFiltro.descripcion || 'Subzona Hidrográfica' }}">
+              <span class="dd-label">Subzona Hidrográfica</span>
+              <span class="dd-value" ng-if="oFiltro.descripcion">{{ oFiltro.descripcion }}</span>
+            </a>
+            </ul>
+          </li>
+        </ul>
+      </div>    
+    </form>
+  </div>
+</nav>
+
+<div id="reporte" style="margin-right: 35px; margin-left: 35px; margin-top: 35px; margin-bottom: 35px;">
+  <div class="row reporte-100">
+    <div class="col-md-12 report-header">
+      <div ng-show="oFiltro.descripcion !== null">
+        <h1 class="report-title">Cuenca del {{ oFiltro.descripcion }}</h1>
+        <div class="report-subtitle">Subzona Hidrográfica</div>
+        <div class="report-divider"></div>
+      </div>
+      <div ng-show="oFiltro.descripcion === null">
+        <h1 class="report-title">Seleccione una Subzona Hidrográfica</h1>
+        <div class="report-subtitle">Use el menú en la parte superior izquierda</div>
+        <div class="report-divider"></div>
+      </div>
+    </div>
+
+    <div class="col-md-12" id="mapa1" style="height: 65vh; padding: 30px; max-width: 97%; margin: 0 auto;"></div>
+  </div>
+
+  <!-- ===== Fila 1 de métricas ===== -->
+  <div class="stats-row">
+    <div class="stat-card">
+      <div class="stat-icon"><i class="la la-clipboard"></i></div>
+      <div class="stat-value">{{ resumen.ENCUESTAS }}</div>
+      <div class="stat-label">ENCUESTAS</div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-icon"><i class="la la-user"></i></div>
+      <div class="stat-value">{{ resumen.USUARIOS }}</div>
+      <div class="stat-label">USUARIOS</div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-icon"><i class="la la-sitemap"></i></div>
+      <div class="stat-value">{{ resumen.USOS }}</div>
+      <div class="stat-label">USOS</div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-icon"><i class="la la-tint"></i></div>
+      <div class="stat-value">{{ resumen.UNHI }}</div>
+      <div class="stat-label">UNHI</div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-icon logo">
+        <img src="../image/LOGO%20MUNICIPIOS.png" alt="Logo Municipios" loading="lazy">
+      </div>
+      <div class="stat-value">{{ resumen.MUNICIPIOS }}</div>
+      <div class="stat-label">MUNICIPIOS</div>
+    </div>
+  </div>
+
+  <!-- ===== Fila 2 de métricas ===== -->
+  <div class="stats-row">
+
+    <div class="stat-card">
+      <div class="stat-icon logo">
+        <img src="../image/LOGO%20CAPTACIONES.png" alt="Logo Captaciones" loading="lazy">
+      </div>
+      <div class="stat-value">{{ resumen.CAPTACIONES }}</div>
+      <div class="stat-label">CAPTACIONES</div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-icon logo">
+        <img src="../image/LOGO%20VERTIMIENTOS.png" alt="Logo Vertimientos" loading="lazy">
+      </div>
+      <div class="stat-value">{{ resumen.VERTIMIENTOS }}</div>
+      <div class="stat-label">VERTIMIENTOS</div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-icon logo">
+        <img src="../image/LOGO%20OCUPACI%C3%93N%20DE%20CAUCE.png" alt="Logo Ocupación de Cauce" loading="lazy">
+      </div>
+      <div class="stat-value">{{ resumen.OCUPACIONES }}</div>
+      <div class="stat-label">OCUPACIONES</div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-icon logo">
+        <img src="../image/LOGO%20ACTIVIDAD%20MINERA.png" alt="Logo Actividad Minera" loading="lazy">
+      </div>
+      <div class="stat-value">{{ resumen.MINERIA }}</div>
+      <div class="stat-label">MINERA</div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-icon logo">
+        <img src="../image/LOGO%20TOTAL.png" alt="Logo Total" loading="lazy">
+      </div>
+      <div class="stat-value">{{ resumen.TOTAL }}</div>
+      <div class="stat-label">TOTAL</div>
+    </div>
+  </div>
+
+  <!-- ===== Splash de información (HTML inyectado) ===== -->
+  <div class="row info-splash-screen">
+    <div class="col-12">
+      <p class="splash-title" ng-bind-html="textoActual.titulo"></p>
+      <div class="splash-description" ng-bind-html="textoActual.descripcion"></div>
+    </div>
+  </div>
+</div>

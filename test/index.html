@@ -1,0 +1,162 @@
+
+<!DOCTYPE html>
+<html class="loading" lang="es" data-textdirection="ltr">
+<!-- BEGIN: Head-->
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui">
+    <title>Consorcio PORH</title>
+    <link rel="apple-touch-icon" href="image/app180.png?v=RHvKRinmNGkBJXTw9vudkD7MeZb3yp" sizes="180x180">
+    <link rel="icon" href="image/app32.png?v=RHvKRinmNGkBJXTw9vudkD7MeZb3yp" sizes="32x32" type="image/png">
+    <link rel="icon" href="image/app16.png?v=RHvKRinmNGkBJXTw9vudkD7MeZb3yp" sizes="16x16" type="image/png">
+    <link rel="icon" href="image/app.ico?v=RHvKRinmNGkBJXTw9vudkD7MeZb3yp">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i%7CQuicksand:300,400,500,700" rel="stylesheet">
+
+    <!-- BEGIN: Vendor CSS-->
+    <link rel="stylesheet" type="text/css" href="app-assets/vendors/css/vendors.min.css">
+    <link rel="stylesheet" type="text/css" href="app-assets/vendors/css/tables/datatable/datatables.min.css">
+    <link rel="stylesheet" type="text/css" href="app-assets/vendors/css/tables/extensions/responsive.dataTables.min.css">
+    <link rel="stylesheet" type="text/css" href="app-assets/vendors/css/weather-icons/climacons.min.css">
+    <link rel="stylesheet" type="text/css" href="app-assets/fonts/meteocons/style.css">
+    <link rel="stylesheet" type="text/css" href="app-assets/vendors/css/charts/morris.css">
+    <link rel="stylesheet" type="text/css" href="app-assets/vendors/css/charts/chartist.css">
+    <link rel="stylesheet" type="text/css" href="app-assets/vendors/css/charts/chartist-plugin-tooltip.css">
+    <!-- END: Vendor CSS-->
+
+    <!-- BEGIN: Theme CSS-->
+    <link rel="stylesheet" type="text/css" href="app-assets/css/bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="app-assets/css/bootstrap-extended.css">
+    <link rel="stylesheet" type="text/css" href="app-assets/css/colors.css">
+    <link rel="stylesheet" type="text/css" href="app-assets/css/components.css">
+    <!-- END: Theme CSS-->
+
+    <!-- BEGIN: Page CSS-->
+    <link rel="stylesheet" type="text/css" href="app-assets/css/core/menu/menu-types/horizontal-menu.css">
+    <link rel="stylesheet" type="text/css" href="app-assets/css/core/colors/palette-gradient.css">
+    <link rel="stylesheet" type="text/css" href="app-assets/fonts/simple-line-icons/style.css">
+    <link rel="stylesheet" type="text/css" href="app-assets/css/core/colors/palette-gradient.css">
+    <link rel="stylesheet" type="text/css" href="app-assets/css/pages/timeline.css">
+    <link rel="stylesheet" type="text/css" href="app-assets/css/pages/dashboard-ecommerce.css">
+    <!-- END: Page CSS-->
+
+    <!-- BEGIN: Custom CSS-->
+    <link href="app-assets/js/scripts/selectize/selectize.css?v=RHvKRinmNGkBJXTw9vudkD7MeZb3yp" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="assets/css/styles.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css" integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ==" crossorigin=""/>
+    <!-- END: Custom CSS-->
+
+</head>
+<!-- END: Head-->
+
+<!-- BEGIN: Body-->
+
+<body class="horizontal-layout horizontal-menu horizontal-menu-padding 2-columns  " data-open="click" data-menu="horizontal-menu" data-col="2-columns" ng-app="encuestas" ng-controller="principalController">
+
+    <!-- BEGIN: Header-->
+    <nav class="header-navbar navbar-expand-md navbar navbar-with-menu navbar-without-dd-arrow navbar-static-top navbar-light navbar-brand-center" style="display:none;">
+        <div class="navbar-wrapper">
+            <div class="navbar-header">
+                <ul class="nav navbar-nav flex-row">
+                    <li class="nav-item mobile-menu d-md-none mr-auto"><a class="nav-link nav-menu-main menu-toggle hidden-xs" href=""><i class="fas fa-list font-large-1"></i></a></li>
+                    <li class="nav-item"><a class="navbar-brand" href=""><img class="brand-logo" alt="modern admin logo" src="assets/image/logo1.png">
+                            <h3 class="brand-text">PORH</h3>
+                        </a></li>
+                    <li class="nav-item d-md-none"><a class="nav-link open-navbar-container" data-toggle="collapse" data-target="#navbar-mobile"><i class="fas fa-ellipsis-v"></i></a></li>
+                </ul>
+            </div>
+            <div class="navbar-container container center-layout">
+                <div class="collapse navbar-collapse" id="navbar-mobile">
+                    <ul class="nav navbar-nav mr-auto float-left">
+                        <li class="nav-item d-none d-md-block"><a class="nav-link nav-menu-main menu-toggle hidden-xs" href=""><i class="fas fa-list"></i></a></li>
+                    </ul>
+                    <ul class="nav navbar-nav float-right">
+                        <li class="dropdown dropdown-user nav-item"><a class="dropdown-toggle nav-link dropdown-user-link" href="" data-toggle="dropdown"><span class="mr-1 user-name text-bold-700">{{ nombreUsuario }}</span><span class="avatar avatar-online"><i class="fas fa-user"></i></span></a>
+                            <div class="dropdown-menu dropdown-menu-right"><a class="dropdown-item" href="#!/inicio"><i class="ft-power"></i> Salir</a>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </nav>
+    
+    <div class="header-navbar navbar-expand-sm navbar navbar-horizontal navbar-fixed navbar-dark navbar-without-dd-arrow navbar-shadow" role="navigation" data-menu="menu-wrapper" style="display:none;">
+        <div class="navbar-container main-menu-content container center-layout" data-menu="menu-container">
+            <ul class="nav navbar-nav" id="main-menu-navigation" data-menu="menu-navigation">
+                <li class="dropdown nav-item" data-menu="dropdown"><a class="dropdown-toggle nav-link" href="#!/inicio" data-toggle="dropdown"><i class="la la-home"></i><span>Inicio</span></a></li>
+                <li class="dropdown nav-item" data-menu="dropdown"><a class="dropdown-toggle nav-link" href="#!/usuario" data-toggle="dropdown"><i class="la la-users"></i><span>Usuarios</span></a></li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- BEGIN: Content-->
+    <div class="app-content container center-layout mt-2" id="wrapper">
+        <div class="content-wrapper">
+            <div class="content-header row mb-1">
+            </div>
+            <div class="content-body ng-view">
+                
+            </div>
+        </div>
+    </div>
+    <!-- END: Content-->
+
+    <div class="sidenav-overlay"></div>
+    <div class="drag-target"></div>
+
+    <!-- BEGIN: Footer-->
+    <!--<footer class="footer footer-transparent footer-light navbar-shadow">
+        <p class="clearfix blue-grey lighten-2 text-sm-center mb-0 px-2 container center-layout"><span class="float-md-left d-block d-md-inline-block">Copyright &copy; 2019 <a class="text-bold-800 grey darken-2" href="https://themeforest.net/user/pixinvent/portfolio?ref=pixinvent" target="_blank">PIXINVENT</a></span><span class="float-md-right d-none d-lg-block">Hand-crafted & Made with <i class="ft-heart pink"></i><span id="scroll-top"></span></span></p>
+    </footer>-->
+    <!-- END: Footer-->
+
+
+    <!-- BEGIN: Vendor JS-->
+    <script src="app-assets/vendors/js/vendors.min.js"></script>
+    <!-- BEGIN Vendor JS-->
+
+    <!-- BEGIN: Page Vendor JS-->
+    <script src="app-assets/vendors/js/ui/jquery.sticky.js"></script>
+    <!--<script src="app-assets/vendors/js/charts/chartist.min.js"></script>
+    <script src="app-assets/vendors/js/charts/chartist-plugin-tooltip.min.js"></script>-->
+    <script src="app-assets/vendors/js/charts/raphael-min.js"></script>
+    <script src="app-assets/vendors/js/charts/morris.min.js"></script>
+    <script src="app-assets/vendors/js/timeline/horizontal-timeline.js"></script>
+    <script src="app-assets/vendors/js/tables/datatable/datatables.min.js"></script>
+    <script src="app-assets/vendors/js/tables/datatable/dataTables.responsive.min.js"></script>
+    <!-- END: Page Vendor JS-->
+
+    <!-- BEGIN: Theme JS-->
+    <script src="app-assets/js/core/app-menu.js"></script>
+    <script src="app-assets/js/core/app.js"></script>
+    <!-- END: Theme JS-->
+
+    <!-- BEGIN: Page JS-->
+    <!--<script src="app-assets/js/scripts/pages/dashboard-ecommerce.js"></script>-->
+    <!-- END: Page JS-->
+
+    <script type="text/javascript" src="assets/angularjs/angularjs.js?v=RHvKRinmNGkBJXTw9vudkD7MeZb3yp"></script>
+    <script type="text/javascript" src="assets/fontawesome/js/all.js?v=RHvKRinmNGkBJXTw9vudkD7MeZb3yp"></script>
+    <script type="text/javascript" src="assets/toastr/toastr.min.js?v=RHvKRinmNGkBJXTw9vudkD7MeZb3yp"></script>
+    <script type="text/javascript" src="app-assets/js/scripts/selectize/microplugin.js"></script>
+    <script type="text/javascript" src="app-assets/js/scripts/selectize/sifter.js"></script>
+    <script type="text/javascript" src="app-assets/js/scripts/selectize/selectize.js"></script>
+    <script type="text/javascript" src="js/control.js?v=RHvKRinmNGkBJXTw9vudkD7MeZb3yp"></script>
+    <script type="text/javascript" src="js/servicios/general.js?v=RHvKRinmNGkBJXTw9vudkD7MeZb3yp"></script>
+
+    <script src="app-assets/js/scripts/angular-route/angular-route.min.js"></script>
+    <script src="app-assets/js/scripts/ocLazyLoad-master/dist/ocLazyLoad.min.js"></script>
+    <script type="text/javascript" src="js/rutas.js?v=RHvKRinmNGkBJXTw9vudkD7MeZb3yp"></script>
+
+    <script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js" integrity="sha512-gZwIG9x3wUXg2hdXF6+rVkLF/0Vi9U8D2Ntg4Ga5I5BZpVkVxlJWbSQtXPSiUTtC0TjtGOmxa1AJPuV0CPthew==" crossorigin=""></script>
+    <script src="app-assets/js/scripts/leaflet-routing-machine/dist/leaflet-routing-machine.js?v=RHvKRinmNGkBJXTw9vudkD7MeZb3yp" ></script>
+    <script type="module" src="https://unpkg.com/@deckdeckgo/core@latest/dist/deckdeckgo/deckdeckgo.esm.js"></script>
+
+    
+
+</body>
+<!-- END: Body-->
+
+</html>

@@ -1,0 +1,240 @@
+<div class="row">
+    <div class="col-md-3" ng-show="oInformacionEncuesta.id === null && !bExportar">
+        <div class="card">
+            <div class="card-body acciones-botones">
+                <button type="button" class="btn btn-info" ng-click="catalogoEncuestas()">Buscar</button>
+                <button type="button" class="btn btn-info" ng-click="exportarEncuestas()" ng-show="aRegistrosTotales.length > 0">CSV ({{ aRegistrosTotales.length }})</button>
+                <button type="button" class="btn btn-info" ng-click="navegarMenu('consultas')">Consultas</button>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <h4 class="card-title" id="basic-layout-form">Filtros de búsqueda</h4>
+                <div class="heading-elements">
+                    <ul class="list-inline mb-0">
+                        <li ng-click="limpiarFiltros()" class="pointer"><i class="fas fa-broom"></i></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="codigo_encuesta" class="form-label">Código de encuesta</label>
+                            <input type="text" class="form-control" id="codigo_encuesta" name="codigo_encuesta" ng-model="oFiltros.codigo_encuesta" />
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="filtro_codigo_cuenca_hidrografica" class="form-label">Fecha diligenciamiento (desde)</label>
+                            <input type="date" class="form-control" name="filtro_fecha_diligenciamiento_desde" id="filtro_fecha_diligenciamiento_desde" ng-model="oFiltros.fecha_diligenciamiento_desde" ng-change="catalogoEncuestas()" />
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="filtro_codigo_cuenca_hidrografica" class="form-label">Fecha diligenciamiento (hasta)</label>
+                            <input type="date" class="form-control" name="filtro_fecha_diligenciamiento_hasta" id="filtro_fecha_diligenciamiento_hasta" ng-model="oFiltros.fecha_diligenciamiento_hasta" ng-change="catalogoEncuestas()" />
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="filtro_nombre_encuestador" class="form-label">Nombre del encuestador</label>
+                            <select class="" id="filtro_nombre_encuestador" name="filtro_nombre_encuestador"></select>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="filtro_codigo_cuenca_hidrografica" class="form-label">Código de la cuenca hidrográfica</label>
+                            <select class="" id="filtro_codigo_cuenca_hidrografica" name="filtro_codigo_cuenca_hidrografica"></select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="filtro_ingeniero_campo" class="form-label">Ingeniero de campo</label>
+                            <select class="" id="filtro_ingeniero_campo" name="filtro_ingeniero_campo"></select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-body">
+                <button type="button" class="btn btn-info" ng-click="catalogoEncuestas()">Buscar</button>
+                <button type="button" class="btn btn-info" ng-click="exportarEncuestas()" ng-show="aRegistrosTotales.length > 0">Exportar ({{ aRegistrosTotales.length }})</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-9" ng-show="oInformacionEncuesta.id === null && !bExportar">
+        <!--<a class="btn btn-info" style="width:240px; float:right; display:inline; margin-left: 10px;" href="#!/registro">Agregar encuesta +</a>
+
+        <div style="clear:both;"></div>-->
+
+        <div style="overflow-x:auto;">
+            <table class="table table-striped table-bordered" id="tb_encuestas">
+                <thead>
+                    <tr>
+                        <th style="width:23%">Código</th>
+                        <th style="width:23%">Cuenca</th>
+                        <th style="width:23%">Diligenciamiento</th>
+                        <th style="width:23%">Validación</th>
+                        <th style="width:8%">Acciones</th>
+                    </tr>
+                </thead>
+                <tfoot>
+                    <tr>
+                        <th>Código</th>
+                        <th>Cuenca</th>
+                        <th>Diligenciamiento</th>
+                        <th>Validación</th>
+                        <th></th>
+                    </tr>
+                </tfoot>
+            </table>
+
+
+            <!--<table class="table table-striped table-bordered dt-responsive nowrap" id="tabla-registros" style="width:100%">
+                <thead>
+                    <tr>
+                        <th>Encuesta</th>
+                        <th>Cuenca hidrográfica</th>
+                        <th>Fecha diligenciamiento</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="oRegistro in aRegistrosMuestra">
+                        <td>{{ oRegistro.codigo_encuesta }}</td>
+                        <td>{{ oRegistro.codigo_cuenca_hidrografica }}</td>
+                        <td>{{ oRegistro.fecha_diligenciamiento }}</td>
+                        <td>
+                            <a ng-attr-href="#!/edicion/{{ oRegistro.id_edicion }}"><i class="fas fa-edit"></i></a>&nbsp;&nbsp;
+                            <a ng-click="cargarInformacionEncuesta(oRegistro.id)"><i class="fas fa-clipboard"></i></a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div>
+                Mostrando registros {{ iDesde }} hasta {{ iHasta }} de un total de  {{ iRegistrosTotales }} 
+            </div>
+
+            <div class="col-12 d-flex align-items-left justify-content-left" style="padding-left: 0px; margin-left: 0px;">
+                <nav aria-label="...">
+                    <ul class="pagination">
+                        <li ng-class="iPaginaActual === 1 ? 'page-item disabled' : 'page-item pointer'" ng-show="iTotalPaginas > 0" ng-click="paginaAnterior()">
+                            <span class="page-link">Previo</span>
+                        </li>
+                        <li ng-repeat="oPagina in rangoP" ng-class="oPagina.pagina === iPaginaActual ? 'page-item active pointer' : 'page-item pointer'" ng-click="seleccionaPagina(oPagina.pagina, false)" ng-show="oPagina.mostrar"><span class="page-link">{{ oPagina.pagina }}</span></li>
+                        <li ng-class="iPaginaActual === iTotalPaginas ? 'page-item disabled' : 'page-item pointer'" ng-show="iTotalPaginas > 0" ng-click="paginaSiguiente()">
+                            <span class="page-link">Siguiente</span>
+                        </li>
+                    </ul>
+                </nav>
+            </div>-->
+        </div>
+    </div>
+
+    <div class="col-md-12" ng-show="oInformacionEncuesta.id !== null && !bExportar">
+        <button type="button" class="btn btn-info" style="width:120px; float:right; display:block;" ng-click="ocultarEncuesta()">Volver</button>
+
+        <div style="clear:both;"></div>
+        
+        <div class="card dv-sup" ng-repeat="oRegistro in oInformacionEncuesta.estructura" ng-show="oRegistro.mostrar">
+            <div class="card-header">
+                <h4 class="card-title">{{ oRegistro.titulo }}</h4>
+            </div>
+            <div class="card-body">
+                <ul class="list-group" ng-repeat="oGrupo in oRegistro.grupos" ng-show="oGrupo.mostrar">
+                    <li class="list-group-item" ng-repeat="oCampo in oGrupo.campos">
+                        <div ng-show="oCampo.valor !== null && (oGrupo.campos.length === 1 || oGrupo.tipo === 'mapa' || oGrupo.tipo === 'imagen')">
+                            <h5 class="text-bold-600">{{ oCampo.titulo }}:</h5>
+                            <small class="text-muted" ng-if="oGrupo.tipo !== 'imagen'">{{ oCampo.valor }}</small>
+                            <img ng-if="oGrupo.tipo === 'imagen'" ng-attr-src="{{ oCampo.url }}" style="max-height: 300px" />
+                        </div>
+                    </li>
+                    <li class="list-group-item" ng-if="oGrupo.tipo === 'mapa' && oGrupo.latitud !== null && oGrupo.longitud !== null">
+                        <div ng-attr-id="{{ oGrupo.contenedor }}" style="width: 100%; height: 400px;">
+                            
+                        </div>
+                    </li>
+                    <li class="list-group-item" ng-if="oGrupo.tipo === 'tabla'">
+                        <div class="row" style="padding: 0px; margin: 0px;" ng-repeat="aCampos in oGrupo.filas">
+                            <div ng-class="oGrupo.clase_css" ng-repeat="oCampo in aCampos">
+                                <div class="form-group">
+                                    <h5 class="text-bold-600">{{ oCampo.titulo }}:</h5>
+                                    <small class="text-muted" ng-if="oGrupo.tipo !== 'imagen'">{{ oCampo.valor }}</small>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-12" ng-show="oInformacionEncuesta.id === null && bExportar">
+        <button type="button" class="btn btn-info" style="width:120px; float:right; display:block;" ng-click="ocultarEncuesta()">Volver</button>
+        <button type="button" class="btn btn-info" style="width:120px; float:right; display:block; margin-right: 5px;" ng-click="generarCSVEncuestas()">CSV ({{ aRegistrosTotales.length }})</button>
+        
+        <div style="clear:both;"></div>
+
+        <div class="card dv-sup" ng-repeat="oRegistro in oExportarEncuesta.estructura">
+            <div class="card-header">
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="" ng-model="oRegistro.seleccionado" ng-checked="oRegistro.seleccionado" ng-click="seleccionaTabla(oRegistro)">
+                    <label class="form-check-label">
+                        <h4 class="card-title">{{ oRegistro.titulo }}</h4>
+                    </label>
+                </div>
+            </div>
+            <div class="card-body">
+                <ul class="list-group" ng-repeat="oGrupo in oRegistro.grupos">
+                    <li class="list-group-item" ng-repeat="oCampo in oGrupo.campos" ng-if="oGrupo.tipo === 'informacion' || oGrupo.tipo === 'mapa'">
+                        <div class="lead">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="" style="margin-top: 0.9rem;" ng-model="oCampo.seleccionado" ng-checked="oCampo.seleccionado" ng-click="seleccionaCampo()">
+                                <label class="form-check-label">
+                                    <small class="text-muted">{{ oCampo.titulo }}</small>
+                                </label>
+                            </div>
+                        </div>
+                    </li>
+
+                    <li class="list-group-item" ng-if="oGrupo.tipo === 'tabla'">
+                        <div class="row" style="padding: 0px; margin: 0px;" ng-repeat="aCampos in oGrupo.filas">
+                            <div ng-class="oGrupo.clase_css" ng-repeat="oCampo in aCampos">
+                                <div class="lead">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" value="" style="margin-top: 0.9rem;" ng-model="oCampo.seleccionado" ng-checked="oCampo.seleccionado" ng-click="seleccionaCampo()">
+                                        <label class="form-check-label">
+                                            <small class="text-muted">{{ oCampo.titulo }}</small>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>

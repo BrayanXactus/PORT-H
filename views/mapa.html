@@ -1,0 +1,74 @@
+<div class="" id="mapa" style="height: 100vh; width: 100%; padding: 0; margin: 0;">
+    <!-- Add home button at the top -->
+    <div class="home-button" style="position: absolute; top: 20px; left: 60px; z-index: 1000;">
+        <a class="btn btn-info"  href="#!/consultas" style="color:white;">
+            <i class="la la-arrow-left"></i> Volver
+        </a>
+    </div>
+    <div class="col-12 d-flex align-items-center justify-content-center">
+
+    </div>
+</div>
+
+<div class="floating-r">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card" style="background: none; color:white;">
+                <div class="card-header" style="background: none;">
+                    <h4 class="card-title" style="color:white;">Módulos</h4>
+                </div>
+                <div class="card-body" style="background: none; color:white;">
+                    <div class="custom-control custom-checkbox mr-1">
+                        <input type="checkbox" class="custom-control-input" name="captaciones" id="captaciones" ng-click="filtroCaptaciones()">
+                        <label class="custom-control-label" for="captaciones">Captaciones</label>
+                    </div>
+    
+                    <div class="custom-control custom-checkbox mr-1">
+                        <input type="checkbox" class="custom-control-input" name="vertimiento" id="vertimiento" ng-click="filtroVertimiento()">
+                        <label class="custom-control-label" for="vertimiento">Vertimiento</label>
+                    </div>
+    
+                    <div class="custom-control custom-checkbox mr-1">
+                        <input type="checkbox" class="custom-control-input" name="ocupacion" id="ocupacion" ng-click="filtroOcupacion()">
+                        <label class="custom-control-label" for="ocupacion">Ocupación de cauce - Obras hidráulicas</label>
+                    </div>
+    
+                    <div class="custom-control custom-checkbox mr-1">
+                        <input type="checkbox" class="custom-control-input" name="minera" id="minera" ng-click="filtroMinera()">
+                        <label class="custom-control-label" for="minera">Actividad minera</label>
+                    </div>
+                </div>
+            </div> 
+        </div>
+    </div>
+    <!-- === DESCARGA === -->
+     <!--
+    <div class="row" style="margin-top:10px;">
+        <div class="col-md-12">
+            <div class="card" style="background: none; color:white;">
+            <div class="card-header" style="background: none;">
+                <h4 class="card-title" style="color:white;">Descargar</h4>
+            </div>
+            <div class="card-body" style="background: none; color:white;">
+                <div class="form-group">
+                <label for="formatoExport">Formato</label>
+                <select id="formatoExport"
+                        class="custom-select"
+                        ng-model="formatoExport"
+                        ng-init="formatoExport='KML'">
+                    <option value="KML">KML</option>
+                    <option value="KMZ">KMZ</option>
+                    <option value="SHP">SHP (ZIP)</option>
+                </select>
+                </div>
+
+                <button type="button"
+                        class="btn btn-success"
+                        ng-click="descargar(formatoExport)">
+                Descargar
+                </button>
+            </div>
+            </div>
+        </div>
+    </div>-->
+</div>

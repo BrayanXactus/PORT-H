@@ -1,0 +1,39 @@
+<div class="" id="sesion" style="background-color: #0c4a6e;">
+    <div class="col-12 d-flex align-items-center justify-content-center">
+        <div class=" box-shadow-2 p-0" style="width: 420px;">
+            <div class="card border-grey border-lighten-3 m-0">
+                <div class="card-header border-0">
+                    <div class="card-title text-center">
+                        <div class=""><img src="image/carlogo.png" style="max-height: 180px;" alt="branding logo"></div>
+                    </div>
+                    <h6 class="card-subtitle  text-center"><span style="font-size: 20px; color: #0c4a6e;">Iniciar sesión</span></h6>
+                </div>
+                <div class="card-content">
+                    <div class="card-body">
+                        <form class="form-horizontal form-simple" ng-submit="iniciarSesion()">
+                            <div class="input-group">
+                                
+                                <input id="correo" type="mail" class="form-control" name="correo" ng-model="oLogin.correo" placeholder="Correo electrónico">
+                            </div>
+
+                            <div class="input-group">
+                                
+                                <input id="contrasenia" type="password" class="form-control" name="contrasenia" ng-model="oLogin.contrasenia" placeholder="Contraseña">
+                            </div>
+                            
+                            <div class="form-group row" style="margin-top: 20px;">
+                                <div class="col-sm-12 col-12">
+                                    <button type="submit" class="btn  w-100" style="background-color: #0C4A6E; color: white;">Ingresar</button>
+                                </div>
+                                <!--<div class="col-sm-6 col-12 text-center text-sm-right"><span class="card-link pointer">¿Olvidó su contraseña?</span></div>-->
+                            </div>
+                            <a class="mt-2" style="color: #0C4A6E; " href="#!/">
+                                Pagina principal
+                            </a>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

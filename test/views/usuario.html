@@ -1,0 +1,92 @@
+<div class="row">
+    <div class="col-md-4">
+        <form ng-submit="guardarEditarUsuario()" class="form-app">
+            <div class="card">
+                <div class="card-header" ng-if="oRegistro.id === null">
+                    <h4 class="card-title">Agregar usuario</h4>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-body">
+                    <div class="form-group">
+                        <label for="nombre_usuario">Tipo de usuario</label>
+    
+                        <fieldset class="radio">
+                            <label>
+                                <input type="radio" name="radio" name="tipo_usuario_administrador" id="tipo_usuario_administrador" ng-value="1" ng-model="oRegistro.tipo_usuario" ng-click="seleccionaTipoUsuario()" required>
+                                Administrador
+                            </label>
+                        </fieldset>
+
+                        <fieldset class="radio">
+                            <label>
+                                <input type="radio" name="radio" name="tipo_usuario_consulta" id="tipo_usuario_consulta" ng-value="2" ng-model="oRegistro.tipo_usuario" ng-click="seleccionaTipoUsuario()" required>
+                                Sólo consulta
+                            </label>
+                        </fieldset>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="nombre_usuario">Nombre</label>
+                        <input type="text" autocomplete="off" class="form-control" name="nombre_usuario" id="nombre_usuario" ng-model="oRegistro.nombre" minlength="4" maxlength="200" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="correo_electronico">Correo electrónico</label>
+                        <input type="email" autocomplete="off" class="form-control" name="correo_electronico" id="correo_electronico" ng-model="oRegistro.correo_electronico" required>
+                    </div>
+
+                    <div class="form-group" ng-if="oRegistro.id !== null">
+                        <fieldset class="checkbox">
+                            <label>
+                                <input type="checkbox" value="" name="modificar_contrasenia" id="modificar_contrasenia" ng-model="oRegistro.modificar_contrasenia" ng-check="oRegistro.modificar_contrasenia">
+                                Modificar contraseña
+                            </label>
+                        </fieldset>
+                    </div>
+
+                    <div class="form-group" ng-if="oRegistro.modificar_contrasenia || oRegistro.id === null">
+                        <label for="contrasenia_usuario" class="pointer">
+                            <div class="txttooltip">
+                                Contraseña <i class="fas fa-info"></i>
+                                <span class="tooltiptext">Al menos 1 mayúscula, al menos 1 minúscula, al menos 1 número, al menos 1 símbolo (!@#$%^&*_=+-) y longitud 8 a 12 caracteres</span>
+                            </div>
+                        </label>
+                        <input type="password" autocomplete="off" class="form-control" name="contrasenia_usuario" id="contrasenia_usuario" ng-model="oRegistro.contrasenia" pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@()#$%^&*_=+-]).{8,12}$" required>
+                    </div>
+
+                    <div class="form-group" ng-if="oRegistro.modificar_contrasenia || oRegistro.id === null">
+                        <label for="contrasenia_usuario_2">Confirmar contraseña</label>
+                        <input type="password" autocomplete="off" class="form-control" name="contrasenia_usuario_2" id="contrasenia_usuario_2" ng-model="oRegistro.contrasenia_2" minlength="8" maxlength="20" required>
+                    </div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-body">
+                    <button type="submit" class="btn btn-primary">Guardar</button>
+                    <button type="button" class="btn btn-secondary" ng-show="oRegistro.id !== null" ng-click="cancelarEdicion()">Cancelar</button>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="col-md-8">
+        <div class="card" ng-repeat="oRegistro in aUsuarios">
+            <div class="card-header pointer">
+                <h4 class="card-title">{{ oRegistro.nombre }}</h4>
+                <div class="heading-elements">
+                    <ul class="list-inline mb-0">
+                        <li ng-click="editarUsuario(oRegistro)"><a data-action="collapse"><i class="fas fa-edit"></i></a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="card-body">
+                <ul class="list-group">
+                    <li class="list-group-item">
+                        <h5 class="text-bold-600">Correo electrónico:</h5>
+                        <small class="text-muted">{{ oRegistro.correo }}</small>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
