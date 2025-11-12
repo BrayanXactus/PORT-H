@@ -1130,8 +1130,33 @@ class UploadHandler
         header($str);
     }
 
-    protected function get_upload_data($id) {
-        return @$_FILES[$id];
+    private const ALLOWED_FILE_FIELDS = ['file', 'csv', 'image', 'document'];
+
+    protected function get_upload_data(string $id): ?array {
+        // 1) Validar el nombre del campo (evita índices raros)
+        if (!preg_match('/^[a-zA-Z0-9_\-]{1,64}$/', $id)) {
+            return null;
+        }
+        if (!in_array($id, self::ALLOWED_FILE_FIELDS, true)) {
+            return null;
+        }
+
+        // 2) No ocultar errores con @ y verificar estructura
+        if (!isset($_FILES[$id]) || !is_array($_FILES[$id])) {
+            return null;
+        }
+
+        $f = $_FILES[$id];
+
+        // 3) Validar errores nativos de PHP en el upload
+        if (!isset($f['error']) || $f['error'] !== UPLOAD_ERR_OK) {
+            return null;
+        }
+        if (!isset($f['tmp_name']) || !is_uploaded_file($f['tmp_name'])) {
+            return null;
+        }
+
+        return $f; // datos de upload ya verificados en lo básico
     }
 
     protected function get_post_param($id) {
