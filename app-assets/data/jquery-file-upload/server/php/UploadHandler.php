@@ -926,39 +926,51 @@ class UploadHandler
     protected function imagemagick_create_scaled_image($file_name, $version, $options) {
         list($file_path, $new_file_path) =
             $this->get_scaled_image_file_paths($file_name, $version);
-        $resize = @$options['max_width']
-            .(empty($options['max_height']) ? '' : 'X'.$options['max_height']);
+
+        $maxWidth  = isset($options['max_width'])  ? (int)$options['max_width']  : 0;
+        $maxHeight = isset($options['max_height']) ? (int)$options['max_height'] : 0;
+        $resize = $maxWidth > 0
+            ? $maxWidth.($maxHeight > 0 ? 'X'.$maxHeight : '')
+            : '';
+
         if (!$resize && empty($options['auto_orient'])) {
             if ($file_path !== $new_file_path) {
                 return copy($file_path, $new_file_path);
             }
             return true;
         }
-        $cmd = $this->options['convert_bin'];
+
+        $cmd = escapeshellcmd($this->options['convert_bin']);
         if (!empty($this->options['convert_params'])) {
-            $cmd .= ' '.$this->options['convert_params'];
+            $cmd .= ' ' . escapeshellcmd($this->options['convert_params']);
         }
-        $cmd .= ' '.escapeshellarg($file_path);
+
+        $cmd .= ' ' . escapeshellarg($file_path);
+
         if (!empty($options['auto_orient'])) {
             $cmd .= ' -auto-orient';
         }
+
         if ($resize) {
-            // Handle animated GIFs:
             $cmd .= ' -coalesce';
             if (empty($options['crop'])) {
-                $cmd .= ' -resize '.escapeshellarg($resize.'>');
+                $cmd .= ' -resize ' . escapeshellarg($resize.'>');
             } else {
-                $cmd .= ' -resize '.escapeshellarg($resize.'^');
+                $cmd .= ' -resize ' . escapeshellarg($resize.'^');
                 $cmd .= ' -gravity center';
-                $cmd .= ' -crop '.escapeshellarg($resize.'+0+0');
+                $cmd .= ' -crop ' . escapeshellarg($resize.'+0+0');
             }
-            // Make sure the page dimensions are correct (fixes offsets of animated GIFs):
             $cmd .= ' +repage';
         }
+
         if (!empty($options['convert_params'])) {
-            $cmd .= ' '.$options['convert_params'];
+            $cmd .= ' ' . escapeshellcmd($options['convert_params']);
         }
-        $cmd .= ' '.escapeshellarg($new_file_path);
+
+        $cmd .= ' ' . escapeshellarg($new_file_path);
+
+        $output = [];
+        $error  = 0;
         exec($cmd, $output, $error);
         if ($error) {
             error_log(implode('\n', $output));
@@ -983,16 +995,17 @@ class UploadHandler
                 }
             }
             if ($this->options['image_library'] === 2) {
-                $cmd = $this->options['identify_bin'];
-                $cmd .= ' -ping '.escapeshellarg($file_path);
+                $cmd = escapeshellcmd($this->options['identify_bin']);
+                $cmd .= ' -ping ' . escapeshellarg($file_path);
+
+                $output = [];
+                $error  = 0;
                 exec($cmd, $output, $error);
                 if (!$error && !empty($output)) {
-                    // image.jpg JPEG 1920x1080 1920x1080+0+0 8-bit sRGB 465KB 0.000u 0:00.000
                     $infos = preg_split('/\s+/', substr($output[0], strlen($file_path)));
                     $dimensions = preg_split('/x/', $infos[2]);
                     return $dimensions;
                 }
-                return false;
             }
         }
         if (!function_exists('getimagesize')) {
@@ -1132,31 +1145,29 @@ class UploadHandler
 
     private const ALLOWED_FILE_FIELDS = ['file', 'csv', 'image', 'document'];
 
-    protected function get_upload_data(string $id): ?array {
-        // 1) Validar el nombre del campo (evita índices raros)
-        if (!preg_match('/^[a-zA-Z0-9_\-]{1,64}$/', $id)) {
+    protected function get_upload_data($id) {
+        if (!is_string($id) || !preg_match('/^[A-Za-z0-9_-]{1,64}$/', $id)) {
             return null;
         }
-        if (!in_array($id, self::ALLOWED_FILE_FIELDS, true)) {
+        if (empty($_FILES[$id]) || !is_array($_FILES[$id])) {
             return null;
         }
+        $file = $_FILES[$id];
+        if (!isset($file['error']) || $file['error'] !== UPLOAD_ERR_OK) {
+            return null;
+        }
+        if (empty($file['tmp_name']) || !is_uploaded_file($file['tmp_name'])) {
+            return null;
+        }
+        return $file;
+    }
 
-        // 2) No ocultar errores con @ y verificar estructura
-        if (!isset($_FILES[$id]) || !is_array($_FILES[$id])) {
-            return null;
-        }
+    protected function get_post_param($id) {
+        return isset($_POST[$id]) ? $_POST[$id] : null;
+    }
 
-        $f = $_FILES[$id];
-
-        // 3) Validar errores nativos de PHP en el upload
-        if (!isset($f['error']) || $f['error'] !== UPLOAD_ERR_OK) {
-            return null;
-        }
-        if (!isset($f['tmp_name']) || !is_uploaded_file($f['tmp_name'])) {
-            return null;
-        }
-
-        return $f; // datos de upload ya verificados en lo básico
+    protected function get_query_param($id) {
+        return isset($_GET[$id]) ? $_GET[$id] : null;
     }
 
     protected function get_post_param($id) {
