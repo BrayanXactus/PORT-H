@@ -294,19 +294,6 @@ angular.module(APPNAME).controller('consultasController', function($scope, $root
     }
 
     $scope.crearMapa = function (sContenedor, fLatitud, fLongitud) {
-        /*let mapa = L.map(sContenedor, { 'zoomControl': true }).setView([fLatitud, fLongitud], 10);
-        L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoiYWl0ZXNvbCIsImEiOiJja3lscjYwdzIycGw1Mnhsa3o0ZGJxMWo4In0.HLgzGp72KMRynenp1el9Fg', {
-            maxZoom: 18,
-            attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, ' +
-                '<a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
-                'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
-            id: 'mapbox/satellite-v9',
-            tileSize: 512,
-            zoomOffset: -1
-        }).addTo(mapa);
-
-        L.marker([fLatitud, fLongitud], { }).addTo(mapa);*/
-
         let map = new L.Map(sContenedor);
         let osmUrl='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
         let osmAttrib='Map data © <a href="https://openstreetmap.org">OpenStreetMap</a> contributors';
@@ -315,7 +302,6 @@ angular.module(APPNAME).controller('consultasController', function($scope, $root
         map.addLayer(osm);
     
         let marker = L.marker([fLatitud, fLongitud]).addTo(map);
-        //marker.bindPopup("<b>Botanischer Garten</b><br>is here").openPopup();
     }
 
     $scope.exportarEncuestas = function () {
@@ -418,7 +404,6 @@ angular.module(APPNAME).controller('consultasController', function($scope, $root
                     create: false,
                     onChange: function (value) {
                         oFiltro.seleccionados = value;
-                        //$scope.catalogoEncuestas();
                     }
                 });
             }
