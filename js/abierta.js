@@ -2323,6 +2323,11 @@ $scope.crearGraficoIUA = function () {
         create: false,
         onChange: function (value) {
             $scope.setMapa2Mode(value || 'municipios');
+        },
+        onInitialize: function () {
+            const sz = this;
+            $scope.setMapa2Mode('municipios');
+            sz.setValue('municipios', true);
         }
     });
     
