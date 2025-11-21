@@ -12,7 +12,7 @@ if (typeof angular !== 'undefined' && angular.module) {
                     { id: 'bogota', nombre: 'Río Bogotá', seleccionada: false },
                     { id: 'garagoa', nombre: 'Río Garagoa', seleccionada: false },
                     { id: 'guavio', nombre: 'Río Guavio', seleccionada: false },
-                    { id: 'ouayuriba', nombre: 'Río Ouayuriba', seleccionada: false },
+                    { id: 'Guayuriba', nombre: 'Río Guayuriba', seleccionada: false },
                     { id: 'negro', nombre: 'Río Negro', seleccionada: false },
                     { id: 'seco', nombre: 'Río Seco y Otros Directos', seleccionada: false },
                     { id: 'suarez', nombre: 'Río Suarez', seleccionada: false },

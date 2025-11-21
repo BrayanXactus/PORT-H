@@ -90,7 +90,7 @@ $scope.cargarResumenEncuestas = function () {
                             'Río Bogotá': 901,
                             'Río Garagoa': 902,
                             'Río Guavio': 900,
-                            'Río Ouayuriba': 899,
+                            'Río Guayuriba': 899,
                             'Río Negro': 905,
                             'Río Seco y Otros Directos': 903,
                             'Río Suarez': 904,

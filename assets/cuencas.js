@@ -229,7 +229,7 @@ const textosCuencas = {
      descripcion: ""
    },
    "899": {
-     titulo: "Información General del Censo de Usuarios del Recurso Hídrico de la Cuenca del Río Ouayuriba",
+     titulo: "Información General del Censo de Usuarios del Recurso Hídrico de la Cuenca del Río Guayuriba",
      descripcion: ""
    },
    "905": {

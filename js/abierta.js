@@ -17,7 +17,24 @@ angular.module(APPNAME).controller('abiertaController', function($scope, $locati
     };
 
     $scope.CTM12_PROJECTION = '+proj=tmerc +lat_0=4.0 +lon_0=-73.0 +k=0.9992 +x_0=5000000 +y_0=2000000 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs';
-
+    
+    $scope.map2Mode = 'municipios';
+    $scope.cuencasData = null;
+    $scope.cuencasLayerGroup = null;
+    $scope.styleCuencaBase = {
+    color: '#197091',
+    weight: 1,
+    opacity: 0.9,
+    fillColor: '#c1d043',
+    fillOpacity: 0.25
+    };
+    $scope.styleCuencaSel = {
+    color: '#FF6B35',
+    weight: 3,
+    opacity: 1,
+    fillColor: '#FFE135',
+    fillOpacity: 0.55
+    };
 
 $scope._claveModulo = function(idModulo){
   return ({1:'CAPTACIONES', 2:'VERTIMIENTOS', 3:'OCUPACIONES', 4:'MINERA'})[idModulo] || null;
@@ -175,6 +192,56 @@ $scope._valorParaGrafica = function(d){
             .catch(function (error) {
             console.error('Error cargando municipios (GeoJSON remoto):', error);
             });
+    };
+
+    $scope.cargarCuencasPOMCAS = function () {
+        const url = 'https://services6.arcgis.com/yq6pe3Lw2oWFjWtF/arcgis/rest/services/Cuencas_segun_POMCAS_en_la_Jurisdiccion_CAR/FeatureServer/1/query?outFields=*&where=1%3D1&f=geojson';
+
+        $http.get(url)
+            .then(function (resp) {
+            $scope.cuencasData = resp.data;
+            $scope.dibujarCuencasPOMCAS();
+            })
+            .catch(function (err) {
+            console.error('Error cargando Cuencas:', err);
+            });
+        };
+
+    $scope.dibujarCuencasPOMCAS = function () {
+        if (!$scope.cuencasData || !$scope.cuencasData.features || !$scope.map2) return;
+
+        if ($scope.cuencasLayerGroup) {
+            $scope.map2.removeLayer($scope.cuencasLayerGroup);
+        }
+        $scope.cuencasLayerGroup = L.layerGroup().addTo($scope.map2);
+
+        ($scope.cuencasData.features || []).forEach(function (feat) {
+            if (!feat || !feat.geometry) return;
+
+            const gj = feat;
+            const props = gj.properties || {};
+            const nombreCuenca = props.NombreCuenca || props.SZH || 'Subzona';
+            const keyNorm = _normTxtUHN(nombreCuenca);
+
+            L.geoJSON(gj, {
+                style: $scope.styleCuencaBase,
+                onEachFeature: function (f, lyr) {
+                    const p = f.properties || {};
+                    lyr.bindPopup($scope.popupCuencaHTML(p));
+
+                    lyr.bindTooltip(nombreCuenca, { direction: 'top', sticky: true, opacity: 0.9 });
+
+                    lyr._cuencaKey = keyNorm;
+
+                    $scope.cuencasLayerGroup.addLayer(lyr);
+                }
+            });
+        });
+
+        try {
+            const b = $scope.cuencasLayerGroup.getBounds();
+            if (b && b.isValid()) $scope.map2.fitBounds(b);
+        } catch (_) {}
     };
 
     
@@ -1029,6 +1096,39 @@ $scope._valorParaGrafica = function(d){
             </div>`;
     };
 
+    $scope.popupCuencaHTML = function (props = {}) {
+        const p = props.properties || props.attributes || props;
+
+        function row(label, key) {
+            const v = p[key];
+            if (v == null || v === '') return '';
+            return `
+            <tr>
+                <th style="text-align:left;padding:4px 8px;">${label}</th>
+                <td style="padding:4px 8px;">${v}</td>
+            </tr>`;
+        }
+
+        const titulo = p.NombreCuenca || p.SZH || 'Subzona hidrográfica';
+
+        return `
+            <div style="font-family:Segoe UI,Arial,sans-serif;min-width:260px;">
+            <div style="background:#197091;color:#fff;padding:8px 10px;border-radius:6px 6px 0 0;font-weight:600;">
+                ${titulo}
+            </div>
+            <div style="border:1px solid #e3e3e3;border-top:none;border-radius:0 0 6px 6px;overflow:hidden;">
+                <table style="width:100%;border-collapse:collapse;font-size:13px;">
+                ${row('Código',      'Codigo')}
+                ${row('Código 2do',  'Codigo_2do')}
+                ${row('AH',          'AH')}
+                ${row('ZH',          'ZH')}
+                ${row('SZH',         'SZH')}
+                ${row('Nombre de cuenca', 'NombreCuenca')}
+                </table>
+            </div>
+            </div>`;
+    };
+
 $scope.convertirProyeccionALatLng = function(x, y) {
     if (!x || !y || isNaN(x) || isNaN(y)) {
         return { lat: 0, lng: 0 };
@@ -1074,6 +1174,68 @@ $scope.limpiarMunicipio = function() {
     }
 
     $scope.map2.setView([4.7, -74.0], 9);
+};
+
+$scope.setMapa2Mode = function (mode) {
+    $scope.map2Mode = mode || 'municipios';
+
+    if ($scope.municipiosLayerGroup && $scope.map2.hasLayer($scope.municipiosLayerGroup)) {
+        $scope.map2.removeLayer($scope.municipiosLayerGroup);
+    }
+    if ($scope.cuencasLayerGroup && $scope.map2.hasLayer($scope.cuencasLayerGroup)) {
+        $scope.map2.removeLayer($scope.cuencasLayerGroup);
+    }
+
+    if ($scope.map2Mode === 'municipios') {
+        if ($scope.municipiosLayerGroup) {
+        $scope.municipiosLayerGroup.addTo($scope.map2);
+        } else {
+        $scope.cargarMunicipiosGeoJSON();
+        }
+    } else if ($scope.map2Mode === 'cuencas_pomca') {
+        if ($scope.cuencasData) {
+        $scope.dibujarCuencasPOMCAS();
+        } else {
+        $scope.cargarCuencasPOMCAS();
+        }
+        $scope.limpiarMunicipio();
+    }
+};
+
+$scope.resaltarCuencaPorUHN1 = function (nombreUHN1) {
+    if (!$scope.cuencasLayerGroup || !$scope.map2) return;
+
+    const target = _normTxtUHN(nombreUHN1 || '');
+    if (!target) return;
+
+    let bounds = null;
+
+    $scope.cuencasLayerGroup.eachLayer(function (layer) {
+        let key = layer._cuencaKey;
+        if (!key) {
+            const p = (layer.feature && (layer.feature.properties || layer.feature.attributes)) || {};
+            key = _normTxtUHN(p.NombreCuenca || p.SZH || '');
+        }
+
+        const match = key && (key === target || key.includes(target) || target.includes(key));
+
+        if (match) {
+            try {
+                layer.setStyle($scope.styleCuencaSel);
+                const b = layer.getBounds && layer.getBounds();
+                if (b && b.isValid()) {
+                    bounds = bounds ? bounds.extend(b) : b;
+                }
+                layer.bringToFront();
+            } catch (_) {}
+        } else {
+            try { layer.setStyle($scope.styleCuencaBase); } catch (_) {}
+        }
+    });
+
+    if (bounds && bounds.isValid && bounds.isValid()) {
+        $scope.map2.fitBounds(bounds, { padding: [20, 20], maxZoom: 11 });
+    }
 };
 
 $scope._ensureUHN12 = function(cb){
@@ -1517,6 +1679,10 @@ $scope.onUHN1Change = function(uhn1Id, dispararPuntos) {
     var uhn1Obj = ($scope.aUHN1 || []).find(u => u.id == uhn1Id);
     if (uhn1Obj && uhn1Obj.descripcion) {
         setTimeout(function(){ $scope.filtrarPorUHN1_Nombre(uhn1Obj.descripcion); }, 300);
+
+        if ($scope.map2Mode === 'cuencas_pomca') {
+            setTimeout(function(){ $scope.resaltarCuencaPorUHN1(uhn1Obj.descripcion); }, 400);
+        }
     }
     
 };
@@ -1529,21 +1695,32 @@ $scope.onMunicipioChange = function(value) {
     if (szMunicipio) {
         $scope.municipioSeleccionado = true;
         var elSel = ($scope._municipiosFiltrados || []).find(m => m.id == szMunicipio);
+
         $scope.cargarPuntosSesion2();
-        if (elSel && elSel.descripcion) {
-            setTimeout(function() { $scope.filtrarPorMunicipio(elSel.descripcion); }, 500);
+
+        if ($scope.map2Mode === 'municipios' && elSel && elSel.descripcion) {
+            setTimeout(function () {
+                $scope.filtrarPorMunicipio(elSel.descripcion);
+            }, 500);
         }
+
         $scope.refrescarMapaDemanda();
     } else {
         $scope.municipioSeleccionado = false;
         $scope.cargarPuntosSesion2();
-        $scope.limpiarMunicipio();
+
+        if ($scope.map2Mode === 'municipios') {
+            $scope.limpiarMunicipio();
+        }
+
         $scope.refrescarMapaDemanda();
     }
+
     $scope.graficosSesion3();
     $scope.cargarDatosGrandesUsuarios();
     $scope.actualizarResumenCounters();
 };
+
 
 
 $scope._ultimoConjuntoPuntos = [];
@@ -2141,8 +2318,13 @@ $scope.crearGraficoIUA = function () {
         }
     });
 
-
-    
+    servicioGeneral.selectize("tipo-mapa-demanda", {
+        maxItems: 1,
+        create: false,
+        onChange: function (value) {
+            $scope.setMapa2Mode(value || 'municipios');
+        }
+    });
     
     $scope.grafica = null;
     $scope.graficas = [];
@@ -2228,9 +2410,7 @@ $scope.crearGraficoIUA = function () {
         console.error("El contenedor #mapa-uhn no existe en el DOM.");
         }
 
-        
-        $scope.cargarMunicipiosGeoJSON();
-
+        $scope.setMapa2Mode('municipios');
         
         $scope.cargarUHNGeoJSON();
 

@@ -293,7 +293,7 @@ angularAppAQ.factory('servicioGeneral', function ($rootScope, $http, configuraci
                 data: {
                     labels: etiquetas,
                     datasets: [{
-                        label: 'Cantidad',
+                        label: 'Demanda (L/s)',
                         data: valores,
                         borderWidth: 1,
                         backgroundColor: [
@@ -336,7 +336,7 @@ angularAppAQ.factory('servicioGeneral', function ($rootScope, $http, configuraci
                                     
                                     labels.forEach((label, i) => {
                                         const value = chart.data.datasets[0].data[i];
-                                        label.text = `${chart.data.labels[i]}: ${value.toFixed(1)}`;
+                                        label.text = `${chart.data.labels[i]}: ${value.toFixed(1)} (L/s)`;
                                     });
                                     
                                     return labels;
