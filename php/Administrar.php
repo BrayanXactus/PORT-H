@@ -1371,6 +1371,8 @@ class Administrar extends DataBase
             '259. Coordinador de proyecto',
             '260. Fecha de procesamiento',
             '261. Observaciones adicionales',
+            '262. Nombre subzona hidrográfica',
+            '263. Código subzona hidrográfica',
             'Firma Autoridad Ambiental Competente',
             'Estado de la validación'
         ];
@@ -3970,6 +3972,8 @@ class Administrar extends DataBase
                     (object) array('tipo' => 'informacion', 'campos' => array((object) array('mostrar' => true, 'requerido' => false, 'tipo' => 'seleccion_simple_texto_editable', 'titulo' => '258. Ingeniero de campo', 'bd' => 'ingeniero_campo', 'valor' => null, 'seleccionado' => true, 'id_lista' => 34))),
                     (object) array('tipo' => 'informacion', 'campos' => array((object) array('mostrar' => true, 'requerido' => false, 'tipo' => 'texto', 'titulo' => '257. Nombre encuestado', 'bd' => 'nombre_encuestado', 'valor' => null, 'seleccionado' => true))),
                     (object) array('tipo' => 'informacion', 'campos' => array((object) array('mostrar' => true, 'requerido' => false, 'tipo' => 'texto', 'titulo' => '259. Coordinador de proyecto', 'bd' => 'coordinador_proyecto', 'valor' => null, 'seleccionado' => true))),
+                    (object) array('tipo' => 'informacion', 'campos' => array((object) array('mostrar' => true, 'requerido' => false, 'tipo' => 'seleccion_simple', 'titulo' => '262. Nombre subzona hidrográfica', 'bd' => 'nombre_subzona_hidrografica', 'valor' => null, 'seleccionado' => true, 'id_lista' => 45))),
+                    (object) array('tipo' => 'informacion', 'campos' => array((object) array('mostrar' => true, 'requerido' => false, 'tipo' => 'seleccion_simple', 'titulo' => '263. Código subzona hidrográfica', 'bd' => 'codigo_subzona_hidrografica', 'valor' => null, 'seleccionado' => true, 'id_lista' => 46))),
                     (object) array('tipo' => 'informacion', 'campos' => array((object) array('mostrar' => true, 'requerido' => false, 'tipo' => 'fecha_hora', 'titulo' => '260. Fecha de procesamiento', 'bd' => 'fecha_procesamiento', 'valor' => null, 'seleccionado' => true))),
                     (object) array('tipo' => 'informacion', 'campos' => array((object) array('mostrar' => true, 'requerido' => false, 'tipo' => 'texto_largo', 'titulo' => '261. Observaciones adicionales', 'bd' => 'observaciones_adicionales', 'valor' => null, 'seleccionado' => true))),
                     (object) array('tipo' => 'imagen', 'campos' => array((object) array('mostrar' => true, 'requerido' => false, 'tipo' => 'imagen', 'titulo' => 'Foto Adicional 1', 'bd' => 'foto_adicional1', 'valor' => null, 'seleccionado' => false))),

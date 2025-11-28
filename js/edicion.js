@@ -268,12 +268,13 @@ angular.module(APPNAME).controller('edicionController', function($scope, $rootSc
                     } 
                     
                     //Selección automática de código
-                    if ((oCampoSeleccionado.bd === 'id_municipio' || oCampoSeleccionado.bd === 'id_nombre_und_geografica_nivel1' || oCampoSeleccionado.bd === 'id_nombre_und_geografica_nivel2') && sTabla === oRegistro.tabla) {
+                    if ((oCampoSeleccionado.bd === 'id_municipio' || oCampoSeleccionado.bd === 'id_nombre_und_geografica_nivel1' || oCampoSeleccionado.bd === 'id_nombre_und_geografica_nivel2' || oCampoSeleccionado.bd === 'nombre_subzona_hidrografica') && sTabla === oRegistro.tabla) {
                         angular.forEach (oGrupo.campos, function (oCampo, c) {
                             if (
                                 (oCampoSeleccionado.bd === 'id_municipio' && oCampo.bd === 'id_dane_municipio') || 
                                 (oCampoSeleccionado.bd === 'id_nombre_und_geografica_nivel1' && oCampo.bd === 'id_codigo_und_geografica_nivel1') ||
-                                (oCampoSeleccionado.bd === 'id_nombre_und_geografica_nivel2' && oCampo.bd === 'id_codigo_und_geografica_nivel2')
+                                (oCampoSeleccionado.bd === 'id_nombre_und_geografica_nivel2' && oCampo.bd === 'id_codigo_und_geografica_nivel2') ||
+                                (oCampoSeleccionado.bd === 'nombre_subzona_hidrografica' && oCampo.bd === 'codigo_subzona_hidrografica')
                             ) {
                                 oCampo.valor = null;
 
@@ -284,6 +285,7 @@ angular.module(APPNAME).controller('edicionController', function($scope, $rootSc
                                         case 'id_dane_municipio': aListaCodigos = $scope.aListas[5]; break;
                                         case 'id_codigo_und_geografica_nivel1': aListaCodigos = $scope.aListas[9]; break;
                                         case 'id_codigo_und_geografica_nivel2': aListaCodigos = $scope.aListas[11]; break;
+                                        case 'codigo_subzona_hidrografica':     aListaCodigos = $scope.aListas[46]; break;
                                     }
 
                                     if ($scope.aIdsListas[oCampoSeleccionado.valor] !== undefined) {
