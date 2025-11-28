@@ -251,6 +251,10 @@ const textosCuencas = {
    "906": {
      titulo: "Información General del Censo de Usuarios del Recurso Hídrico de la Cuenca del Río Carare Minero",
      descripcion: ""
-   }
+   },
+   "1124": {
+     titulo: "Información General del Censo de Usuarios del Recurso Hídrico de la Cuenca del Río Suarez",
+     descripcion: ""
+   },
  }
 };

@@ -32,7 +32,8 @@ angular.module(APPNAME).controller('cuencaController', function($scope, $locatio
 $scope.cargarResumenEncuestas = function () {
   servicioGeneral.enviarAjax({
     url: "ControlEncuestas.php",
-    data: { method: "resumenEncuestas" },
+    data: { method: "resumenEncuestas", 
+            idSubZona: $scope.oFiltro.idSubZona },
     success: function (response) {
       try {
         $scope.$applyAsync(function () {
@@ -141,6 +142,8 @@ $scope.cargarResumenEncuestas = function () {
     $scope.seleccionaSubZona = (oSubZona) => {
         $scope.oFiltro.idSubZona = oSubZona.id;
         $scope.oFiltro.descripcion = oSubZona.descripcion;
+
+        $scope.cargarResumenEncuestas();
 
         $scope.actualizarTextoGeneral(oSubZona.id.toString());
         
@@ -338,7 +341,6 @@ $scope.cargarResumenEncuestas = function () {
 
     
     $scope.filtroSubZonaHidrografica();
-    $scope.cargarResumenEncuestas();
 
     setTimeout(function() {
         if ($("#ajax-loading").is(":visible")) {

@@ -172,12 +172,31 @@
       <div class="collapse navbar-collapse" id="navbarScroll">
         <ul class="navbar-nav mr-auto my-2 my-lg-0 navbar-nav-scroll" style="max-height: 100px;">
           <li class="nav-item dropdown" style="float:left;">
-            <a class="nav-link dropdown-toggle subzona-dd" href="#!/abierta" role="button" data-toggle="dropdown" aria-expanded="false"
-               title="{{ oFiltro.descripcion || 'Subzona Hidrográfica' }}">
+            <a class="nav-link dropdown-toggle subzona-dd"
+              href=""
+              role="button"
+              data-toggle="dropdown"
+              aria-expanded="false"
+              title="{{ oFiltro.descripcion || 'Subzona Hidrográfica' }}"
+              ng-click="$event.preventDefault()">
               <span class="dd-label">Subzona Hidrográfica</span>
+
+              <!-- Texto cuando ya hay subzona seleccionada -->
               <span class="dd-value" ng-if="oFiltro.descripcion">{{ oFiltro.descripcion }}</span>
+
+              <!-- Placeholder cuando aún no hay selección -->
+              <span class="dd-placeholder" ng-if="!oFiltro.descripcion">Seleccione una subzona</span>
             </a>
-            </ul>
+
+            <!-- MENÚ DESPLEGABLE CON LAS SUBZONAS (id_lista 45) -->
+            <div class="dropdown-menu">
+              <a class="dropdown-item"
+                href=""
+                ng-repeat="sz in aSubZonaHidrografica"
+                ng-click="seleccionaSubZona(sz); $event.preventDefault();">
+                {{ sz.descripcion }}
+              </a>
+            </div>
           </li>
         </ul>
       </div>    

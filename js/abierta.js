@@ -320,6 +320,20 @@ $scope._valorParaGrafica = function(d){
         '2120-19':'#F8E71C'
     };
 
+    const CATEGORY_BY_COLOR = {
+        '#4A90E2': 'Muy Bajo',
+        '#7ED321': 'Bajo',
+        '#F8E71C': 'Moderado',
+        '#F5A623': 'Alto',
+        '#D0021B': 'Muy Alto',
+        '#8B0000': 'Crítico'
+    };
+
+    function getCategoriaUHN1(attrs, nombreFallback){
+        const color = (getColorUHN1(attrs, nombreFallback) || '').toUpperCase();
+        return CATEGORY_BY_COLOR[color] || 'Sin categoría';
+    }
+
     function getColorUHN1(attrs, nombreFallback){
         const codeKeys = ['N_NV_SUB', 'NO_UNIDAD','NO_UHN1','NO_UNID','CODIGO','COD_UHN1','CODIGO_UHN1','NO_UHN'];
         let code = null;
@@ -516,7 +530,7 @@ $scope._valorParaGrafica = function(d){
         return { color:'#197091', weight:1, opacity:.9, fillColor:'#c1d043', fillOpacity:.25 };
     };
     $scope.estiloUHN1Resaltado = function(){
-        return { color:'#FF6B35', weight:3, opacity:1, fillColor:'#FFE135', fillOpacity:.55 };
+        return { color:'#197091', weight:3, opacity:1, fillColor:'#c1d043', fillOpacity:.55 };
     };
 
     $scope.reconstruirIndiceUHN1 = function(){
@@ -1374,13 +1388,13 @@ $scope.dibujarUHN1EnMapaUHN = function (features, nombreUHN1) {
 
         
         const a0 = (features[0].attributes || features[0].properties || {});
-        const codigo = a0.CÓDIGO || a0.CODIGO || '';
+        const categoria = getCategoriaUHN1(a0, nombreUHN1);
         $scope.uhn1OutlineLayerUHN.bindPopup(`
         <div style="font-family:Arial, sans-serif; min-width:220px;">
             <div style="background:linear-gradient(45deg,#FF6B35,#FFE135);color:#fff;padding:8px;margin:-8px -8px 8px -8px;border-radius:4px 4px 0 0;">
             <strong style="font-size:16px;">📍 ${nombreUHN1}</strong>
             </div>
-            ${codigo ? `<strong>🔢 Código:</strong> ${codigo}<br>` : ``}
+            ${categoria ? `<strong>📊 Categoría:</strong> ${categoria}<br>` : ``}
         </div>
         `);
 
@@ -1757,6 +1771,39 @@ function addNorthControl(map, scopeKey) {
     map.addControl($scope[scopeKey]);
 }
 
+$scope.iuaLegendImgCtrl = null;
+
+function addIUALegendImage(map) {
+    if (!map) return;
+
+    if ($scope.iuaLegendImgCtrl) {
+        map.removeControl($scope.iuaLegendImgCtrl);
+        $scope.iuaLegendImgCtrl = null;
+    }
+
+    const ctrl = L.control({ position: 'bottomright' });
+    ctrl.onAdd = function () {
+        const div = L.DomUtil.create('div', 'leaflet-control');
+        div.style.background = 'rgba(255,255,255,0.9)';
+        div.style.padding = '6px 8px';
+        div.style.borderRadius = '6px';
+        div.style.boxShadow = '0 1px 3px rgba(0,0,0,0.25)';
+        div.style.fontFamily = 'Arial, sans-serif';
+
+        const img = document.createElement('img');
+        img.src = '/image/indice_agua.jpg';
+        img.alt = 'Leyenda Índice Uso del Agua';
+        img.style.maxWidth = '180px';
+        img.style.display = 'block';
+
+        div.appendChild(img);
+        return div;
+    };
+
+    $scope.iuaLegendImgCtrl = ctrl;
+    map.addControl(ctrl);
+}
+
 
 $scope.addHeatmapTitleAndLegend = function(minV, maxV) {
     if (!$scope.map3) return;
@@ -1806,13 +1853,6 @@ $scope.addHeatmapTitleAndLegend = function(minV, maxV) {
 
     
 $scope.cargarPuntosSesion2 = () => {
-  const oDatos = {
-    method: "puntosMapaPredio",
-    idModulo: $scope.oFiltro.idModulo,
-    UHN1: $scope.oFiltro.UHN1,
-    UHN2: $scope.oFiltro.UHN2,
-    idMunicipio: $scope.oFiltro.idMunicipio
-  };
 
   if ($scope.aClusterMarkers && $scope.map2) {
     $scope.map2.removeLayer($scope.aClusterMarkers);
@@ -1821,7 +1861,7 @@ $scope.cargarPuntosSesion2 = () => {
 
   servicioGeneral.enviarAjax({
     url: "ControlEncuestas.php",
-    data: oDatos,
+    data: $scope._filtros({ method: "puntosMapaPredio", idModulo: $scope.oFiltro.idModulo }),
     success: function(response) {
       
       let puntos = Array.isArray(response) ? response : (Array.isArray(response?.puntos) ? response.puntos : []);
@@ -2404,15 +2444,18 @@ $scope.crearGraficoIUA = function () {
 
         
         if (document.getElementById('mapa-uhn')) {
-        $scope.mapUHN = new L.Map('mapa-uhn', { attributionControl:false, zoomControl:true });
-        const baseUHN = buildBaseLayers()["OSM Básico"];
-        baseUHN.addTo($scope.mapUHN);
-        $scope.mapUHN.setView(new L.LatLng(4.711161905, -74.16767461), 8);
-        
-        L.control.scale({ metric:true, imperial:false, position:'bottomleft' }).addTo($scope.mapUHN);
-        addNorthControl($scope.mapUHN, 'northCtrlUHN');
+            $scope.mapUHN = new L.Map('mapa-uhn', { attributionControl:false, zoomControl:true });
+            const baseUHN = buildBaseLayers()["OSM Básico"];
+            baseUHN.addTo($scope.mapUHN);
+            $scope.mapUHN.setView(new L.LatLng(4.711161905, -74.16767461), 8);
+
+            L.control.scale({ metric:true, imperial:false, position:'bottomleft' }).addTo($scope.mapUHN);
+            addNorthControl($scope.mapUHN, 'northCtrlUHN');
+
+            addIUALegendImage($scope.mapUHN);
+
         } else {
-        console.error("El contenedor #mapa-uhn no existe en el DOM.");
+            console.error("El contenedor #mapa-uhn no existe en el DOM.");
         }
 
         $scope.setMapa2Mode('municipios');

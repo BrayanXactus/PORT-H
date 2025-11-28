@@ -23,7 +23,6 @@ class Administrar extends DataBase
 
     public function iniciarSesion() : array
     {
-        //$this->actualizaMunicipioUH();
 
         $this->sSql = "
             SELECT id, nombre, correo, contrasenia, editar_encuesta, agregar_encuesta, exportar_encuesta, administrar_usuarios, consultar_encuesta, fecha_caducidad
@@ -490,9 +489,6 @@ class Administrar extends DataBase
         ];
     }
 
-    /*
-    * Total de encuestas
-    */
     public function catalogoTotalEncuestas() {
         $this->sSql = "SELECT COUNT(id) AS 'cantidad' FROM dbo.encuesta";        
         $this->aExecute = array();
@@ -506,9 +502,6 @@ class Administrar extends DataBase
         return $iDatosTotal;
     }
 
-    /*
-    * Determinar columnas a ordenar
-    */
     public function catalogoColumnasOrdenar() {
         $bOrdenarColumna = isset($this->oPostData->order) ? (isset($this->oPostData->order[0]) ? (isset($this->oPostData->order[0]['column']) ? $this->oPostData->order[0]['column'] : false) : false) : false;
         $sDireccionOrdenar = isset($this->oPostData->order) ? (isset($this->oPostData->order[0]) ? (isset($this->oPostData->order[0]['dir']) ? $this->oPostData->order[0]['dir'] : 'desc') : 'desc') : 'desc';
@@ -1387,13 +1380,10 @@ class Administrar extends DataBase
         fputcsv($fp, $aTitulos, ';');
 
         try {
-            /* ---------- 7. Procesamiento por lotes de datos ---------- */
             foreach (array_chunk($idsOrdenados, $batchSize) as $batchIds) {
 
-                // Reinicio las opciones múltiples para ESTE lote
                 $aOpcionesMult = [];
 
-                /* -- 7.1  Resolver valores de selección múltiple -- */
                 foreach ($aMultiple as $def) {
                     $ph             = implode(',', array_fill(0, count($batchIds), '?'));
                     $this->sSql     = "
@@ -1411,8 +1401,7 @@ class Administrar extends DataBase
                     }
                 }
 
-                /* -- 7.2  Recorrer cada tabla y armar las filas de datos -- */
-                $aFilasEncuestas = [];  // id → array de valores
+                $aFilasEncuestas = [];
 
                 foreach ($aEstructuraEncuesta as $oTabla) {
                     if (empty($aTablasCampo[$oTabla->tabla])) continue;
@@ -1433,7 +1422,6 @@ class Administrar extends DataBase
                             foreach ($campos as $oCampo) {
                                 if (!in_array($oCampo->bd, $aTablasCampo[$oTabla->tabla], true)) continue;
 
-                                // Resolver valor
                                 if (in_array($oCampo->tipo, ['numero','decimal','seleccion_simple_texto_editable'])) {
                                     $oCampo->tipo = 'texto';
                                     unset($oCampo->id_lista);
@@ -1455,12 +1443,10 @@ class Administrar extends DataBase
                                 ? str_replace(['.', ';'], [',', ','], (string)$valor)
                                 : str_replace(';', ',', (string)$valor);
 
-                            // si el string empieza con ',', le añadimos el '0' delante
                             if (isset($cell[0]) && $cell[0] === ',') {
                                 $cell = '0' . $cell;
                             }
                             if ($oCampo->bd === 'cedula_catastral') {
-                                // Excel lo tomará como fórmula y mostrará el número completo
                                 $cell = '="' . $cell . '"';
                             }
 
@@ -1474,7 +1460,6 @@ class Administrar extends DataBase
                     }
                 }
 
-                /* -- 7.2.5  Obtener y mapear MODULO para este lote -- */
                 $phModulo       = implode(',', array_fill(0, count($batchIds), '?'));
                 $this->sSql     = "SELECT id, modulos FROM dbo.encuesta WHERE id IN ($phModulo)";
                 $this->aExecute = $batchIds;
@@ -2056,7 +2041,6 @@ class Administrar extends DataBase
         $idEncuesta = 0;
         $aDatosTablas = [];
 
-        //encuestas existentes
         $bEncuestaExiste = false;
         $sCodigoEncuesta = null;
         $sFechaDiligenciamiento = null;
@@ -2349,18 +2333,12 @@ class Administrar extends DataBase
 
     private function base64AJpeg($base64_string, $output_file) 
     {
-        // open the output file for writing
         $ifp = fopen( $output_file, 'wb' ); 
     
-        // split the string on commas
-        // $data[ 0 ] == "data:image/png;base64"
-        // $data[ 1 ] == <actual base64 string>
         $data = explode( ',', $base64_string );
     
-        // we could add validation here with ensuring count( $data ) > 1
         fwrite( $ifp, base64_decode( $data[ 1 ] ) );
     
-        // clean up the file resource
         fclose( $ifp );
 
         $this->oArchivos->listarMoverArchivosEncuestasS3();
@@ -2545,7 +2523,6 @@ class Administrar extends DataBase
             '</html>'
         ]);
 
-        //echo implode('', $aContenidoPDF);exit();
 
         $this->oArchivoPDF = new PDF($this->oSesion);
         $this->oArchivoPDF->configurarColumnas(1, 'J', 3);
@@ -2593,12 +2570,12 @@ class Administrar extends DataBase
 
         $idModulo    = $idModuloOverride ?? (isset($this->oPostData->idModulo) ? (int)$this->oPostData->idModulo : 0);
         if ($idModulo === null || $idModulo < 1 || $idModulo > 4) {
-            // Si envían null o >4, devolver lista vacía y NO ejecutar query
             return [];
         }
         $UHN1        = isset($this->oPostData->UHN1) ? (int)$this->oPostData->UHN1 : null;
         $UHN2        = isset($this->oPostData->UHN2) ? (int)$this->oPostData->UHN2 : null;
         $idMunicipio = isset($this->oPostData->idMunicipio) ? (int)$this->oPostData->idMunicipio : null;
+        $idSubZona = isset($this->oPostData->idSubZona) ? (int)$this->oPostData->idSubZona : null;
 
         switch ($idModulo) {
             case 1:
@@ -2825,7 +2802,6 @@ class Administrar extends DataBase
                     'municipio_m' => $r['municipio_m']?: 'No disponible',
                     'este_modulo' => (int) $r['este_m']?: 0,
                     'norte_modulo' => (int) $r['norte_m']?: 0,
-                    // IDs para filtros
                     'id_uhn1'       => isset($r['id_uhn1']) ? (int)$r['id_uhn1'] : null,
                     'id_uhn2'       => isset($r['id_uhn2']) ? (int)$r['id_uhn2'] : null,
                     'id_municipio'  => isset($r['id_municipio']) ? (int)$r['id_municipio'] : null
@@ -2872,6 +2848,10 @@ class Administrar extends DataBase
             'id_uhn2'      => $UHN2,
             'id_municipio' => $idMunicipio,
         ];
+
+        if ($idSubZona !== 901 && $idSubZona !== null) {
+            return [];
+        }
 
         $aPuntos = array_values(array_filter($aPuntos, function ($p) use ($filters) {
             foreach ($filters as $key => $val) {
@@ -3044,7 +3024,6 @@ class Administrar extends DataBase
 
         $aEncuestas = [];
 
-        // 2) Filtros entrantes (mismos nombres que usas en otros métodos)
         $UHN1        = isset($this->oPostData->UHN1) ? (int)$this->oPostData->UHN1 : null;
         $UHN2        = isset($this->oPostData->UHN2) ? (int)$this->oPostData->UHN2 : null;
         $idMunicipio = isset($this->oPostData->idMunicipio) ? (int)$this->oPostData->idMunicipio : null;
@@ -3081,8 +3060,6 @@ class Administrar extends DataBase
                     $aEncuestas[$r['id_encuesta']] = $sumaDemanda + $aEncuestas[$r['id_encuesta']];
                 }
 
-                //unset($oCampoUso->bd);
-                //unset($oCampoUso->elementos);
             }
         }
 
@@ -3109,7 +3086,6 @@ class Administrar extends DataBase
             ORDER BY a.descripcion
         ";
 
-        // Cada filtro se usa dos veces
         $this->aExecute = [
             $UHN1, $UHN1,
             $UHN2, $UHN2,
@@ -3152,7 +3128,6 @@ class Administrar extends DataBase
             ORDER BY a.descripcion
         ";
 
-        // Cada filtro se usa dos veces
         $this->aExecute = [
             $UHN1, $UHN1,
             $UHN2, $UHN2,
@@ -3193,7 +3168,6 @@ class Administrar extends DataBase
             ORDER BY a.descripcion
         ";
 
-        // Cada filtro se usa dos veces
         $this->aExecute = [
             $UHN1, $UHN1,
             $UHN2, $UHN2,
@@ -3234,7 +3208,6 @@ class Administrar extends DataBase
             ORDER BY a.descripcion
         ";
 
-        // Cada filtro se usa dos veces
         $this->aExecute = [
             $UHN1, $UHN1,
             $UHN2, $UHN2,
@@ -3252,16 +3225,10 @@ class Administrar extends DataBase
 
     private function conteoPorModulo(int $modulo) : int
     {
-        // Filtros entrantes
         $UHN1        = isset($this->oPostData->UHN1) ? (int)$this->oPostData->UHN1 : null;
         $UHN2        = isset($this->oPostData->UHN2) ? (int)$this->oPostData->UHN2 : null;
         $idMunicipio = isset($this->oPostData->idMunicipio) ? (int)$this->oPostData->idMunicipio : null;
 
-        // Cambian las tablas de soporte según módulo:
-        // 1=Captaciones -> fuente_captacion (fc)
-        // 2=Vertimientos -> fuente_receptora_vertimiento (frv)
-        // 3=Ocupaciones -> informacion_fuente_ocupacion_cauce (ifoc)
-        // 4=Minería -> informacion_actividad_minera_cuerpos_agua (iamca)
         switch ($modulo) {
             case 1:
                 $join = "LEFT JOIN dbo.fuente_captacion fc ON fc.id_encuesta = e.id";
@@ -3294,7 +3261,6 @@ class Administrar extends DataBase
                 break;
 
             case 4:
-                // OJO: aquí corregimos el bug típico -> join por id_encuesta
                 $join = "LEFT JOIN dbo.informacion_actividad_minera_cuerpos_agua iamca ON iamca.id_encuesta = e.id";
                 $whereFiltros = "
                     AND (? IS NULL OR iamca.id_nombre_und_geografica_nivel1 = ?)
@@ -3316,8 +3282,6 @@ class Administrar extends DataBase
             $whereFiltros
         ";
 
-        // Agregamos el módulo al final del arreglo de parámetros (o al inicio; solo sé consistente)
-        // En este caso lo pondremos primero para que sea fácil leer:
         $this->aExecute = array_merge([$modulo], $exec);
 
         $this->execQuery();
@@ -3343,6 +3307,23 @@ class Administrar extends DataBase
 
     public function resumenEncuestas() : array
     {
+        $idSubZona = isset($this->oPostData->idSubZona) ? (int)$this->oPostData->idSubZona : null;
+
+        if ($idSubZona !== 901) {
+
+            return [
+                'ENCUESTAS'     => 0,
+                'USUARIOS'      => 0,
+                'USOS'          => 0,
+                'UNHI'          => 0,
+                'MUNICIPIOS'    => 0,
+                'CAPTACIONES'   => 0,
+                'VERTIMIENTOS'  => 0,
+                'OCUPACIONES'   => 0,
+                'MINERIA'       => 0,
+                'TOTAL'         => 0
+            ];
+        }
         $capt = (int) ($this->conteoPorModulo(1) ?? 0);
         $vert = (int) ($this->conteoPorModulo(2) ?? 0);
         $ocup = (int) ($this->conteoPorModulo(3) ?? 0);
@@ -3426,10 +3407,6 @@ class Administrar extends DataBase
         $aMunicipio = $this->subLista();
 
         $resumen = $this->resumenModulos();
-
-        #if (!isset($_SESSION['CONTEO_ENCUESTAS'])) {
-        #    $this->conteoEncuestasSesion();
-        #}
 
         return [
             'unidad_hidrografica_nivel_1' => $aUndHNivel1,
@@ -3600,6 +3577,11 @@ class Administrar extends DataBase
 
     public function reporteConteoModulo() {
         $aReporte = [];
+        $idSubZona = isset($this->oPostData->idSubZona) ? (int)$this->oPostData->idSubZona : null;
+
+        if ($idSubZona !== 901 && $idSubZona !== null) {
+            return [];
+        }
 
         if ($this->oPostData->idModulo === 1) {
             $this->conteoUsosDistinto();
@@ -3614,16 +3596,12 @@ class Administrar extends DataBase
             $this->conteoOcupacionesCauceTipoObra();
             $aReporte = $this->aCamposOcupacionesCauceTipoObra;
             $aConsumo = [];
-            #$aConsumo = $this->sumaDemandaOcupacion();
         } else if ($this->oPostData->idModulo === 4) {
             $this->conteoMineria();
             $aReporte = $this->aCamposMineria;
             $aConsumo = [];
         }
 
-        // --- Fusionar consumo dentro de detalle (match por 'bd') ---
-
-        // 1) Indexar consumo por 'bd'
         $idxConsumo = [];
         if (!empty($aConsumo) && is_array($aConsumo)) {
             foreach ($aConsumo as $it) {
@@ -3637,7 +3615,6 @@ class Administrar extends DataBase
             }
         }
 
-        // 2) Inyectar en cada fila de detalle
         foreach ($aReporte as &$fila) {
             $isArr    = is_array($fila);
             $nombre       = $isArr ? ($fila['nombre'] ?? null) : ($fila->nombre ?? null);
@@ -3646,7 +3623,6 @@ class Administrar extends DataBase
             if ($nombre !== null && isset($idxConsumo[$nombre])) {
                 $consumo   = $idxConsumo[$nombre]['consumo'];
             } else {
-                // sin match: consumo = cantidad de detalle, elementos vacío
                 $consumo   = $cantidad;
             }
 
@@ -3667,6 +3643,11 @@ class Administrar extends DataBase
     }
 
     public function sesionReporte4() {
+        $idSubZona = isset($this->oPostData->idSubZona) ? (int)$this->oPostData->idSubZona : null;
+
+        if ($idSubZona !== 901 && $idSubZona !== null) {
+            return [];
+        }
         $aEncuestasSumaDemanda = $this->sumaDemandaHidrica();
         $aIdEncuestas = array_keys($aEncuestasSumaDemanda);
 
@@ -3703,6 +3684,12 @@ class Administrar extends DataBase
     }
 
     public function grandes_usuarios() {
+
+        $idSubZona = isset($this->oPostData->idSubZona) ? (int)$this->oPostData->idSubZona : null;
+
+        if ($idSubZona !== 901 && $idSubZona !== null) {
+            return [];
+        }
 
         $idModulo    = isset($this->oPostData->idModulo) ? (int)$this->oPostData->idModulo : 1;
         $UHN1        = isset($this->oPostData->UHN1) ? (int)$this->oPostData->UHN1 : null;
@@ -3794,10 +3781,8 @@ class Administrar extends DataBase
 /*
     public function exportarMapa() : array
     {
-        // 0) Entradas (POST preferido para AJAX; GET como respaldo)
         $format  = strtoupper($this->oPostData->format ?? ($_POST['format'] ?? $_GET['format'] ?? 'KML')); // SHP|KML|KMZ
 
-        // Compatibilidad: si el router no pobló oPostData, leer de POST
         if (!isset($this->oPostData->filtros)) {
             $filtrosPost = $_POST['filtros'] ?? null;
             if ($filtrosPost) {
@@ -3811,10 +3796,8 @@ class Administrar extends DataBase
             }
         }
 
-        // 1) Datos (usa tus filtros/switches ya presentes en oPostData)
         $puntos = $this->puntosMapa();
 
-        // 2) GeoJSON
         $geojson = [
             'type' => 'FeatureCollection',
             'features' => []
@@ -3850,13 +3833,11 @@ class Administrar extends DataBase
         $created  = []; // para limpiar en caso de error
 
         try {
-            // 3) Guardar GeoJSON temporal
             if (!file_put_contents($gjPath, json_encode($geojson, JSON_UNESCAPED_UNICODE))) {
                 throw new RuntimeException('No se pudo crear el GeoJSON temporal.');
             }
             $created[] = $gjPath;
 
-            // 4) Salidas por formato (dejar archivo en /temp y devolver URL)
             if ($format === 'KML') {
                 $outFile = $base . '.kml';
                 $outPath = $tmpDir . $outFile;
@@ -3885,13 +3866,11 @@ class Administrar extends DataBase
             }
 
             if ($format === 'SHP') {
-                // Requiere GDAL/ogr2ogr instalado en el servidor
                 $outDir = $tmpDir . $base;
                 if (!@mkdir($outDir) && !is_dir($outDir)) {
                     throw new RuntimeException('No se pudo crear el directorio temporal para SHP.');
                 }
 
-                // Si necesitas reproyección, añade:  -t_srs EPSG:4326
                 $cmd = "ogr2ogr -f 'ESRI Shapefile' " . escapeshellarg($outDir) . ' ' . escapeshellarg($gjPath) . " -nln puntos -overwrite";
                 exec($cmd, $o, $ret);
                 if ($ret !== 0) {
@@ -3915,7 +3894,6 @@ class Administrar extends DataBase
 
             throw new InvalidArgumentException('Formato no soportado: ' . $format);
         } catch (Throwable $e) {
-            // Limpieza si hubo error
             foreach ($created as $f) {
                 if (is_file($f)) @unlink($f);
                 if (is_dir($f))  @rmdir($f);
@@ -3941,19 +3919,16 @@ class Administrar extends DataBase
         foreach ($gj['features'] as $f) {
             $pm = $doc->createElement('Placemark');
 
-            // name (si existe)
             $nameVal = $f['properties']['codigo_encuesta'] ?? null;
             if ($nameVal) {
                 $name = $doc->createElement('name', htmlspecialchars((string)$nameVal));
                 $pm->appendChild($name);
             }
 
-            // description (JSON de propiedades)
             $desc = $doc->createElement('description');
             $desc->appendChild($doc->createCDATASection(json_encode($f['properties'], JSON_UNESCAPED_UNICODE)));
             $pm->appendChild($desc);
 
-            // geometría (punto)
             if (($f['geometry']['type'] ?? '') === 'Point') {
                 $coords = $f['geometry']['coordinates'];
                 $pt = $doc->createElement('Point');
@@ -3974,7 +3949,6 @@ class Administrar extends DataBase
         header('Content-Disposition: attachment; filename="'.$filename.'"');
         header('Content-Length: '.filesize($path));
         readfile($path);
-        // opcional: unlink($path) si quieres limpiar al vuelo
     }
 */
     private function estructuraEncuesta() 
