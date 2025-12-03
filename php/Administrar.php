@@ -2443,12 +2443,12 @@ class Administrar extends DataBase
                     if ($bCoordenadasValidas) {
                         $bContenidoModulo = true;
 
-                        $aContenidoModulo = array_merge_recursive($aContenidoModulo, [
-                            '<div class="list-group-item">',
-                            '<img src="' . $this->generarImagenMapa($oGrupo->latitud, $oGrupo->longitud) . '" style="max-height: 400px" />',
-                            '<br/>',
-                            '</div>'
-                        ]);
+                        #$aContenidoModulo = array_merge_recursive($aContenidoModulo, [
+                        #    '<div class="list-group-item">',
+                        #    '<img src="' . $this->generarImagenMapa($oGrupo->latitud, $oGrupo->longitud) . '" style="max-height: 400px" />',
+                        #    '<br/>',
+                        #    '</div>'
+                        #]);
                     }
                 } else if ($oGrupo->tipo === 'tabla') {
                     $aTabla = [
@@ -2537,18 +2537,6 @@ class Administrar extends DataBase
 
         ob_clean(); 
         return array('file' => BASE_URL . 'temp/' . $sNombreArchivo . '.pdf');
-    }
-
-    public function generarImagenMapa($lat, $lng) {
-        $zoom = 15;
-        $width = 400;
-        $height = 300;
-        $name = rand(1, 100000000);
-        $apiKey = 'AIzaSyC9O_0TE0QcMPctgeWm0_F3_MNz4BCvMnM';
-        $url = "https://maps.googleapis.com/maps/api/staticmap?center=$lat,$lng&zoom=$zoom&size={$width}x{$height}&markers=color:red%7Clabel:A%7C$lat,$lng&key=$apiKey";
-        $image = file_get_contents($url);
-        file_put_contents("../temp/{$name}.png", $image);        
-        return BASE_URL . 'temp/' . $name . '.png';
     }
 
     public function puntosMapa() {
