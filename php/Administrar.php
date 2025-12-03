@@ -544,13 +544,6 @@ class Administrar extends DataBase
                 $this->sSql = "SELECT t." . $oModulo->id_validar . " AS id_encuesta FROM dbo." . $oModulo->tabla . " t WHERE ";
                 $this->aExecute = array();
 
-                /*if (count($aIdsEncuestasFiltro) > 0) {
-                    $this->sSql .= "t." . $oModulo->id_validar . " NOT IN (" . implode(', ', array_fill(0, count($aIdsEncuestasFiltro), '?')) . ") AND (" . implode(' OR ', $aCamposFiltro) . ")";
-                    $this->aExecute = $aIdsEncuestasFiltro;
-                } else {
-                    $this->sSql .= implode(' OR ', $aCamposFiltro);
-                }*/
-
                 $this->sSql .= implode(' OR ', $aCamposFiltro);
 
                 $this->execQuery();
@@ -989,11 +982,9 @@ class Administrar extends DataBase
 
     public function obtenerDatosEncuestasCSV() : array
     {
-        /* ---------- 0. Parámetros generales ---------- */
-        $batchSize            = 100;            // tamaño del lote que se usará después
+        $batchSize            = 100;
         $this->oPostData->listas = true;
 
-        /* ---------- 1. Cargar estructura y catálogos ---------- */
         $e                    = $this->cargarEstructuraEncuesta();
         $aEstructuraEncuesta  = $e['estructura'];
         $aIdsListas           = [];
@@ -1001,17 +992,14 @@ class Administrar extends DataBase
             $aIdsListas[$l['id']] = $l['descripcion'];
         }
 
-        /* ---------- 2. Campos solicitados por tabla ---------- */
         $aTablasCampo = [];
         foreach ($this->oPostData->campos as $c) {
             $aTablasCampo[$c->tabla][] = $c->campo;
         }
 
-        /* ---------- 3. IDs solicitados, para filtrar rápido ---------- */
         $idsSolicitados = array_map('intval', $this->oPostData->ids);
         $setSolicitados = array_flip($idsSolicitados);
 
-        /* ---------- 4. Obtener **todos** los id ordenados ---------- */
         $this->sSql = "
             SELECT id, codigo_encuesta
             FROM dbo.encuesta
@@ -1026,7 +1014,6 @@ class Administrar extends DataBase
             }
         }
 
-        /* ---------- 5. Definición de tablas con selección múltiple ---------- */
         $aMultiple = [
             ['origen'=>'captacion_en_fuente',     'opciones'=>'captacion_en_fuente_caracteristicas_abastecimiento', 'campo'=>'caracteristicas_abastecimiento'],
             ['origen'=>'uso_recurso_hidrico',     'opciones'=>'uso_recurso_hidrico_tipo_construccion',             'campo'=>'tipo_construccion'],
@@ -1034,16 +1021,13 @@ class Administrar extends DataBase
             ['origen'=>'informacion_vertimiento', 'opciones'=>'informacion_vertimiento_tipo_descarga',             'campo'=>'tipo_descarga'],
         ];
 
-        /* ---------- 6. Preparar el archivo CSV y los encabezados UNA SOLA VEZ ---------- */
         $archivo = date('YmdHis') . 'encuestas.csv';
         $fp      = fopen(PATH_TEMP . $archivo, 'wb');
         if (!$fp) {
             throw new RuntimeException('No se pudo crear el CSV.');
         }
-        // BOM UTF-8
         fprintf($fp, chr(0xEF).chr(0xBB).chr(0xBF));
 
-        // Construyo el array de títulos SOLO UNA VEZ
         $aTitulos = [];
         foreach ($aEstructuraEncuesta as $oTabla) {
             if (empty($aTablasCampo[$oTabla->tabla])) continue;
@@ -1058,7 +1042,6 @@ class Administrar extends DataBase
             }
         }
 
-        // Escribo la fila de encabezados
         $__ORDEN_DESEADO__ = [
             'MODULO',
             '0. Código encuesta',
@@ -1479,7 +1462,6 @@ class Administrar extends DataBase
                     }
                 }
 
-                /* -- 7.3  Volcar las filas de ESTE lote al CSV -- */
                 foreach ($batchIds as $idOrd) {
                     if (isset($aFilasEncuestas[$idOrd])) {
                         $mod = $aModuloPorId[$idOrd] ?? '';
@@ -2442,13 +2424,6 @@ class Administrar extends DataBase
 
                     if ($bCoordenadasValidas) {
                         $bContenidoModulo = true;
-
-                        #$aContenidoModulo = array_merge_recursive($aContenidoModulo, [
-                        #    '<div class="list-group-item">',
-                        #    '<img src="' . $this->generarImagenMapa($oGrupo->latitud, $oGrupo->longitud) . '" style="max-height: 400px" />',
-                        #    '<br/>',
-                        #    '</div>'
-                        #]);
                     }
                 } else if ($oGrupo->tipo === 'tabla') {
                     $aTabla = [
@@ -3000,16 +2975,6 @@ class Administrar extends DataBase
             (object) [ 'bd' => 'id_uso_minero', 'nombre' => 'Minero', 'cantidad' => 0, 'elementos' => ['mineria'] ],
             (object) [ 'bd' => 'id_uso_generacion_hidroelectrica', 'nombre' => 'Generación hidroeléctrica', 'cantidad' => 0, 'elementos' => ['generacion_electrica'] ],
             (object) [ 'bd' => 'id_otros_usos', 'nombre' => 'Otros usos', 'cantidad' => 0, 'elementos' => ['otros'] ]
-            #(object) [ 'bd' => 'id_uso_pecuario', 'nombre' => 'Pecuario', 'cantidad' => 0, 'elementos' => ['uso_pecuario_1_consumo', 'uso_pecuario_2_consumo', 'uso_pecuario_3_consumo', 'uso_pecuario_4_consumo'] ],
-            #(object) [ 'bd' => 'id_uso_acuicola', 'nombre' => 'Acuícola', 'cantidad' => 0, 'elementos' => ['uso_acuicola_1_consumo', 'uso_acuicola_2_consumo', 'uso_acuicola_3_consumo', 'uso_acuicola_4_consumo'] ],
-            #(object) [ 'bd' => 'id_uso_agricola_silvicola', 'nombre' => 'Agrícola, silvícola', 'cantidad' => 0, 'elementos' => ['uso_agricola_silvicola_1_consumo', 'uso_agricola_silvicola_2_consumo', 'uso_agricola_silvicola_3_consumo', 'uso_agricola_silvicola_4_consumo'] ],
-            #(object) [ 'bd' => 'id_uso_industrial', 'nombre' => 'Industrial', 'cantidad' => 0, 'elementos' => ['uso_industrial_consumo'] ],
-            #(object) [ 'bd' => 'id_uso_minero', 'nombre' => 'Minero', 'cantidad' => 0, 'elementos' => ['uso_minero_consumo'] ],
-            #(object) [ 'bd' => 'id_uso_generacion_hidroelectrica', 'nombre' => 'Generación hidroeléctrica', 'cantidad' => 0, 'elementos' => ['uso_generacion_hidroelectrica_consumo'] ],
-            #(object) [ 'bd' => 'id_uso_recreacional', 'nombre' => 'Recreacional', 'cantidad' => 0, 'elementos' => ['uso_recreacional_consumo'] ],
-            #(object) [ 'bd' => 'id_uso_servicios', 'nombre' => 'Servicios', 'cantidad' => 0, 'elementos' => ['uso_servicios_consumo'] ],
-            #(object) [ 'bd' => 'id_uso_explotacion_petrolera', 'nombre' => 'Explotación petrolera', 'cantidad' => 0, 'elementos' => ['uso_explotacion_petrolera_consumo'] ],
-            #(object) [ 'bd' => 'id_otros_usos', 'nombre' => 'Otros usos', 'cantidad' => 0, 'elementos' => ['otros_usos_consumo'] ]
         ];
 
         $aEncuestas = [];

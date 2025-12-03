@@ -85,20 +85,12 @@ $scope.seleccionarCuenca = function(cuenca) {
             }
             $location.path('/cuenca');
             
-            // PRUEBA TAMBIÉN ESTE MÉTODO:
             setTimeout(function() {
-                console.log('⏰ 50ms después:');
-                console.log('⏰ $location.path():', $location.path());
-                console.log('⏰ window.location.href:', window.location.href);
-                console.log('⏰ window.location.hash:', window.location.hash);
             }, 50);
             
-            // Y también intenta navegación manual:
             window.location.hash = '#!/cuenca';
             
             setTimeout(function() {
-                console.log('📍 URL después de $location.path:', $location.path());
-                console.log('📍 URL del navegador:', window.location.href);
             }, 100);
             
             // Forzar la actualización
@@ -107,8 +99,6 @@ $scope.seleccionarCuenca = function(cuenca) {
             }
             
             setTimeout(function() {
-                console.log('📍 URL final:', window.location.href);
-                console.log('📍 Hash:', window.location.hash);
             }, 500);
             
         } else {

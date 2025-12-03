@@ -607,8 +607,6 @@ angular.module(APPNAME).controller('registroController', function($scope, $rootS
                             };
 
                             query.onerror = function (event) {
-                                console.log("error");
-                                console.log(event.target.errorCode);
                                 $scope.bEjecutarGuardadoLocal = false;
                             }
 
@@ -663,7 +661,6 @@ angular.module(APPNAME).controller('registroController', function($scope, $rootS
     
         query.onerror = function (event) {
             $scope.bEjecutarGuardadoLocal = false;
-            console.log(event.target.errorCode);
         }
     
         txn.oncomplete = function () {
@@ -723,8 +720,6 @@ angular.module(APPNAME).controller('registroController', function($scope, $rootS
                         let sValor = oCampo.valor !== undefined && oCampo.valor !== null ? (oCampo.valor.toString().trim().length > 0 ? oCampo.valor.toString().trim() : null) : null;
 
                         if (oCampo.valor === undefined) {
-                            console.log(oCampo);
-                            console.log(oRegistro.tabla);
                         }
     
                         if (oCampo.tipo === 'fecha') {
@@ -797,7 +792,6 @@ angular.module(APPNAME).controller('registroController', function($scope, $rootS
                         let query = store2.put(oEncuestaGuardar);
 
                         query.onsuccess = function (event) {
-                            console.log("create success!!");
                         }
 
                         query.onerror = function (event) {

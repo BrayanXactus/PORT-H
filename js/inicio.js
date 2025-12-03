@@ -252,9 +252,6 @@ angular.module(APPNAME).controller('inicioController', function($scope, $rootSco
                     });
                 });
 
-                console.log($scope.oInformacionEncuesta.id);
-                console.log($scope.bExportar);
-
                 $("#ajax-loading").hide();
             }
         }); 

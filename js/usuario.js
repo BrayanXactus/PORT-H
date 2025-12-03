@@ -6,7 +6,6 @@ angular.module(APPNAME).controller('usuarioController', function($scope, $rootSc
             "url": "ControlEncuestas.php", 
             "data": { "method": "catalogoUsuarios" },
             "success": function (response) {
-                console.log("Respuesta del servidor:", response); // Añade esta línea
                 $scope.aUsuarios = response.catalogo;
                 $('[data-toggle="tooltip"]').tooltip({
                     "container":"body"
@@ -99,7 +98,6 @@ angular.module(APPNAME).controller('usuarioController', function($scope, $rootSc
         "consultar_encuesta": oRegistro.consultar_encuesta
     }
     
-    console.log("Objeto fecha convertido:", fechaCaducidad);
 }
 
     $scope.cancelarEdicion = function () {

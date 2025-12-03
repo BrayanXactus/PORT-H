@@ -981,7 +981,6 @@ $scope._valorParaGrafica = function(d){
             .filter(x => x.norm.includes(target.split(' ')[0] || ''))
             .slice(0,5)
             .map(x => x.nombre);
-            console.log('Sugerencias:', sug);
             return null;
         }
         return hit.feature;

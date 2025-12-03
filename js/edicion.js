@@ -15,8 +15,6 @@ angular.module(APPNAME).controller('edicionController', function($scope, $rootSc
                         $scope.oEditarEncuesta.modulo2 = response.modulo2; 
                         $scope.oEditarEncuesta.modulo3 = response.modulo3; 
                         $scope.oEditarEncuesta.modulo4 = response.modulo4;
-
-                        console.log($scope.oEditarEncuesta);
         
                         $scope.aListas = [];
                         $scope.aIdsListas = [];
