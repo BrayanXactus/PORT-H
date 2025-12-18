@@ -1,7 +1,6 @@
 
 <!DOCTYPE html>
 <html class="loading" lang="es" data-textdirection="ltr">
-<!-- BEGIN: Head-->
 
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -14,34 +13,26 @@
     <link rel="icon" href="image/app.ico?v=AtYmUrcQ4hDxaRh7uANM0CEtJvfreY">
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i%7CQuicksand:300,400,500,700" rel="stylesheet">
 
-    <!-- BEGIN: Vendor CSS-->
     <link rel="stylesheet" type="text/css" href="app-assets/vendors/css/vendors.min.css">
     <link rel="stylesheet" type="text/css" href="app-assets/vendors/css/tables/datatable/datatables.min.css">
-    <!--<link rel="stylesheet" type="text/css" href="app-assets/vendors/css/tables/extensions/responsive.dataTables.min.css">-->
     <link rel="stylesheet" type="text/css" href="app-assets/vendors/css/weather-icons/climacons.min.css">
     <link rel="stylesheet" type="text/css" href="app-assets/fonts/meteocons/style.css">
     <link rel="stylesheet" type="text/css" href="app-assets/vendors/css/charts/morris.css">
     <link rel="stylesheet" type="text/css" href="app-assets/vendors/css/charts/chartist.css">
     <link rel="stylesheet" type="text/css" href="app-assets/vendors/css/charts/chartist-plugin-tooltip.css">
-    <!-- END: Vendor CSS-->
 
-    <!-- BEGIN: Theme CSS-->
     <link rel="stylesheet" type="text/css" href="app-assets/css/bootstrap.css?v=AtYmUrcQ4hDxaRh7uANM0CEtJvfreY">
     <link rel="stylesheet" type="text/css" href="app-assets/css/bootstrap-extended.css">
     <link rel="stylesheet" type="text/css" href="app-assets/css/colors.css">
     <link rel="stylesheet" type="text/css" href="app-assets/css/components.css">
-    <!-- END: Theme CSS-->
 
-    <!-- BEGIN: Page CSS-->
     <link rel="stylesheet" type="text/css" href="app-assets/css/core/menu/menu-types/horizontal-menu.css">
     <link rel="stylesheet" type="text/css" href="app-assets/css/core/colors/palette-gradient.css">
     <link rel="stylesheet" type="text/css" href="app-assets/fonts/simple-line-icons/style.css">
     <link rel="stylesheet" type="text/css" href="app-assets/css/core/colors/palette-gradient.css">
     <link rel="stylesheet" type="text/css" href="app-assets/css/pages/timeline.css">
     <link rel="stylesheet" type="text/css" href="app-assets/css/pages/dashboard-ecommerce.css">
-    <!-- END: Page CSS-->
 
-    <!-- BEGIN: Custom CSS-->
     <link href="js/library/selectize/selectize.css?v=AtYmUrcQ4hDxaRh7uANM0CEtJvfreY" rel="stylesheet">
     <link href="js/library/toastr/toastr.css?v=AtYmUrcQ4hDxaRh7uANM0CEtJvfreY" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="js/library/ui-select/select.css?v=AtYmUrcQ4hDxaRh7uANM0CEtJvfreY"/>
@@ -49,14 +40,8 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
     <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css" />
     <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css" />
-    <!-- END: Custom CSS-->
 
 </head>
-<!-- END: Head-->
-
-<!-- BEGIN: Body-->
-
-
 
 <body class="horizontal-layout horizontal-menu horizontal-menu-padding 2-columns  " data-open="click" data-menu="horizontal-menu" data-col="2-columns" ng-app="encuestas" ng-controller="principalController">
     <div class="cs-loader" id="ajax-loading" style="display:none;">
@@ -70,64 +55,7 @@
             <label>	●</label>
         </div>
     </div>
-    
-    <!-- <div class="cs-loader" id="ajax-loading" style="display:none;">
-        <div class="cs-loader-inner">
-            <div id="q" style="padding-right:10px;"><img src="https://visor.movilencuesta.com/assets/image/logo1.png?v=AtYmUrcQ4hDxaRh7uANM0CEtJvfreY" style="height: 60px;" alt="" /></div>
-            <label>	●</label>
-            <label>	●</label>
-            <label>	●</label>
-            <label>	●</label>
-            <label>	●</label>
-            <label>	●</label>
-        </div>
-    </div> -->
 
-    <!-- BEGIN: Header-->
-    <!-- <nav class="header-navbar navbar-expand-md navbar navbar-with-menu navbar-without-dd-arrow navbar-static-top navbar-light navbar-brand-center" ng-cloak ng-if="oDatosSesion.sUrlSolicitud !== 'sesion' && oDatosSesion.sUrlSolicitud !== 'mapa' && oDatosSesion.sUrlSolicitud !== 'abierta'">
-        <div class="navbar-wrapper">
-            <div class="navbar-header">
-                <ul class="nav navbar-nav flex-row">
-                    <li class="nav-item mobile-menu d-md-none mr-auto"><a class="nav-link nav-menu-main menu-toggle hidden-xs" href=""><i class="fas fa-list font-large-1"></i></a></li>
-                    <li class="nav-item"><a class="navbar-brand" href=""><img class="brand-logo" alt="modern admin logo" src="image/logo1.png">
-                            <h3 class="brand-text">PORH</h3>
-                        </a></li>
-                    <li class="nav-item d-md-none"><a class="nav-link open-navbar-container" data-toggle="collapse" data-target="#navbar-mobile"><i class="fas fa-ellipsis-v"></i></a></li>
-                </ul>
-            </div>
-            <div class="navbar-container container center-layout">
-                <div class="collapse navbar-collapse" id="navbar-mobile">
-                    <ul class="nav navbar-nav mr-auto float-left">
-                        <li class="nav-item d-none d-md-block"><a class="nav-link nav-menu-main menu-toggle hidden-xs" href=""><i class="fas fa-list"></i></a></li>
-                    </ul>
-                    <ul class="nav navbar-nav float-right">
-                        <li class="dropdown dropdown-user nav-item" ng-cloak ng-if="oDatosSesion.bSession"><a class="dropdown-toggle nav-link dropdown-user-link" href="" data-toggle="dropdown"><span class="mr-1 user-name text-bold-700" style="margin-bottom: 0px !important;">{{ oDatosSesion.nombre }}</span><span class="avatar avatar-online"><i class="fas fa-user"></i></span></a>
-                            <div class="dropdown-menu dropdown-menu-right"><a class="dropdown-item" href="" ng-click="cerrarSesion()"><i class="ft-power"></i> Salir</a>
-                            </div>
-                        </li>
-                        <li class="dropdown dropdown-user nav-item" ng-cloak ng-if="!oDatosSesion.bSession"><a class="dropdown-toggle nav-link dropdown-user-link" href="" data-toggle="dropdown"><span class="mr-1 user-name text-bold-700" style="margin-bottom: 0px !important;">{{ oDatosSesion.nombre }}</span><span class="avatar avatar-online"><i class="fas fa-user"></i></span></a>
-                            <div class="dropdown-menu dropdown-menu-right"><a class="dropdown-item" href="" ng-click="cerrarSesion()"><i class="fas fa-door-open"></i> Acceder</a>
-                            </div>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </nav>
-    
-    <div class="header-navbar navbar-expand-sm navbar navbar-horizontal navbar-fixed navbar-dark navbar-without-dd-arrow navbar-shadow" role="navigation" data-menu="menu-wrapper" ng-cloak ng-if="oDatosSesion.sUrlSolicitud !== 'sesion' && oDatosSesion.sUrlSolicitud !== 'mapa' && oDatosSesion.sUrlSolicitud !== 'abierta'">
-        <div class="navbar-container main-menu-content container center-layout" data-menu="menu-container">
-            <ul class="nav navbar-nav" id="main-menu-navigation" data-menu="menu-navigation">
-                <li class="dropdown nav-item" data-menu="dropdown" ng-show="oDatosSesion.bSession" ng-click="navegarMenu('inicio')"><span class="nav-link pointer"><i class="la la-home"></i><span>Inicio</span></span></li>
-                <li class="dropdown nav-item" data-menu="dropdown" ng-click="navegarMenu('registro')"><span class="nav-link pointer"><i class="la la-th-list"></i><span>Encuesta</span></span></li>
-                <li class="dropdown nav-item" data-menu="dropdown" ng-show="oDatosSesion.bSession" ng-click="navegarMenu('consultas')"><span class="nav-link pointer"><i class="la la-filter"></i><span>Consultas</span></span></li>
-                <li class="dropdown nav-item" data-menu="dropdown" ng-show="oDatosSesion.bSession" ng-click="navegarMenu('mapa')"><span class="nav-link pointer"><i class="la la-map-marker"></i><span>Mapa</span></span></li>
-                <li class="dropdown nav-item" data-menu="dropdown" ng-show="oDatosSesion.bSession && oDatosSesion.administrar_usuarios" ng-click="navegarMenu('usuario')"><span class="nav-link pointer"><i class="la la-users"></i><span>Usuarios</span></span></li>
-            </ul>
-        </div>
-    </div> -->
-
-    <!-- BEGIN: Content-->
     <div ng-cloak ng-class="oDatosSesion.sUrlSolicitud === 'sesion' || oDatosSesion.sUrlSolicitud === 'mapa' || oDatosSesion.sUrlSolicitud === 'abierta' || oDatosSesion.sUrlSolicitud === 'cuenca' ? 'app-content ' : 'app-content center-layout'" id="wrapper">
         <div class="content-wrapper">
             <div ng-class="oDatosSesion.sUrlSolicitud !== 'abierta' && oDatosSesion.sUrlSolicitud !== 'cuenca' ? 'content-header row' : 'content-header row'" ng-if="oDatosSesion.sUrlSolicitud !== 'sesion' && oDatosSesion.sUrlSolicitud !== 'mapa'">
@@ -136,44 +64,22 @@
             </div>
         </div>
     </div>
-    <!-- END: Content-->
 
     <div class="sidenav-overlay"></div>
     <div class="drag-target"></div>
 
-    <!-- BEGIN: Footer-->
-    <!--<footer class="footer footer-transparent footer-light navbar-shadow">
-        <p class="clearfix blue-grey lighten-2 text-sm-center mb-0 px-2 container center-layout"><span class="float-md-left d-block d-md-inline-block">Copyright &copy; 2019 <a class="text-bold-800 grey darken-2" href="https://themeforest.net/user/pixinvent/portfolio?ref=pixinvent" target="_blank">PIXINVENT</a></span><span class="float-md-right d-none d-lg-block">Hand-crafted & Made with <i class="ft-heart pink"></i><span id="scroll-top"></span></span></p>
-    </footer>-->
-    <!-- END: Footer-->
 
+    <script src="app-assets/vendors/js/material-vendors.min.js"></script>
 
-    <!-- BEGIN: Vendor JS-->
-    <script src="app-assets/vendors/js/vendors.min.js"></script>
-    <!-- BEGIN Vendor JS-->
-
-    <!-- Bootstrap 4.6.2 (bundle con Popper) -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
-
-    <!-- BEGIN: Page Vendor JS-->
     <script src="app-assets/vendors/js/ui/jquery.sticky.js"></script>
-    <!--<script src="app-assets/vendors/js/charts/chartist.min.js"></script>
-    <script src="app-assets/vendors/js/charts/chartist-plugin-tooltip.min.js"></script>-->
     <script src="app-assets/vendors/js/charts/raphael-min.js"></script>
     <script src="app-assets/vendors/js/charts/morris.min.js"></script>
     <script src="app-assets/vendors/js/timeline/horizontal-timeline.js"></script>
     <script src="app-assets/vendors/js/tables/datatable/datatables.min.js"></script>
-    <!--<script src="app-assets/vendors/js/tables/datatable/dataTables.responsive.min.js"></script>-->
-    <!-- END: Page Vendor JS-->
 
-    <!-- BEGIN: Theme JS-->
     <script src="app-assets/js/core/app-menu.js"></script>
     <script src="app-assets/js/core/app.js"></script>
-    <!-- END: Theme JS-->
 
-    <!-- BEGIN: Page JS-->
-    <!--<script src="app-assets/js/scripts/pages/dashboard-ecommerce.js"></script>-->
-    <!-- END: Page JS-->
 
     <script type="text/javascript" src="js/library/angularjs/angular.js?v=AtYmUrcQ4hDxaRh7uANM0CEtJvfreY"></script>
     <script type="text/javascript" src="js/library/fontawesome/js/all.js?v=AtYmUrcQ4hDxaRh7uANM0CEtJvfreY"></script>
@@ -187,8 +93,6 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"
             integrity="sha512-CQBWl4fJHWbryGE+Pc7UAxWMUMNMWzWxF4SQo9CgkJIN1kx6djDQZjh3Y8SZ1d+6I+1zze6Z7kHXO7q3UyZAWw=="
             crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script src="https://cdn.jsdelivr.net/npm/leaflet.heat@0.2.0/dist/leaflet-heat.min.js"></script>
-    <script src="assets/leaflet.browser/leaflet.browser.print.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"
             integrity="sha512-BNaRQnYJYiPSqHHDb58B0yaPfCu+Wgds8Gp/gU33kqBtgNS4tSPHuGibyoeqMV/TJlSKda6FXzoEyYGjTe+vXA=="
             crossorigin="anonymous" referrerpolicy="no-referrer"></script>
@@ -213,6 +117,5 @@
     
 
 </body>
-<!-- END: Body-->
 
 </html>

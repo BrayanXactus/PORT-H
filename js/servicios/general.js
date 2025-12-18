@@ -142,7 +142,7 @@ angularAppAQ.factory('servicioGeneral', function ($rootScope, $http, configuraci
             let aPartesFecha = [];
             let sFecha = null;
             
-            if (valor !== null) {
+            if (valor === undefined || valor === null) {
                 if (valor.toString().length > 0) {
                     valor = valor.substring(0, 10);
         
@@ -166,7 +166,7 @@ angularAppAQ.factory('servicioGeneral', function ($rootScope, $http, configuraci
         },
 
         obtenerHora: function(valor) {
-            if (valor !== null) {
+            if (valor !== undefined || valor !== null) {
                 if (valor.toString().length === 16) {
                     return valor.substring(11, 16) + ':00';
                 } else if (valor.toString().length >= 19) {

@@ -59,7 +59,7 @@
 
                             <div class="form-group" ng-if="oCampo.tipo === 'disabled_edit' && oCampo.bd !== 'dane_departamento' && oCampo.bd !== 'ingeniero_campo' && oCampo.bd !== 'fecha_diligenciamiento' && oCampo.bd !== 'fecha_procesamiento' && oCampo.bd !== 'nombre_usuario' && oCampo.bd !== 'consumo'">
                                 <label ng-attr-for="{{ oRegistro.tabla + '_' + oCampo.bd }}" class="text-bold-600">{{ oCampo.titulo }}</label>
-                                <input type="text" class="form-control" ng-attr-id="{{ oRegistro.tabla + '_' + oCampo.bd }}" ng-attr-name="{{ oRegistro.tabla + '_' + oCampo.bd }}" ng-value="oCampo.valor" />
+                                <input type="text" class="form-control" ng-attr-id="{{ oRegistro.tabla + '_' + oCampo.bd }}" ng-attr-name="{{ oRegistro.tabla + '_' + oCampo.bd }}" ng-model="oCampo.valor" ng-keyup="ingresaDatos(oRegistro.tabla, oCampo)" decimal-only />
                             </div>
     
                             <div class="form-group" ng-if="oCampo.tipo === 'texto'">
@@ -80,7 +80,7 @@
     
                             <div class="form-group" ng-if="oCampo.tipo === 'texto_largo'">
                                 <label ng-attr-for="{{ oRegistro.tabla + '_' + oCampo.bd }}" class="text-bold-600">{{ oCampo.titulo }}</label>
-                                <textarea class="form-control" ng-attr-id="{{ oRegistro.tabla + '_' + oCampo.bd }}" ng-attr-name="{{ oRegistro.tabla + '_' + oCampo.bd }}" ng-model="oCampo.valor" />
+                                <textarea class="form-control" ng-attr-id="{{ oRegistro.tabla + '_' + oCampo.bd }}" ng-attr-name="{{ oRegistro.tabla + '_' + oCampo.bd }}" ng-model="oCampo.valor" ></textarea>
                             </div>
     
                             <div class="form-group" ng-if="oCampo.tipo === 'imagen' && oCampo.valor !== null">
@@ -167,7 +167,7 @@
 
                                     <div class="form-group" ng-if="oCampo.tipo === 'texto_largo'" ng-attr-id="{{ oCampo.fila }}" ng-show="oCampo.mostrar">
                                         <label ng-attr-for="{{ oRegistro.tabla + '_' + oCampo.bd }}" class="text-bold-600">{{ oCampo.titulo }}</label>
-                                        <textarea class="form-control" ng-attr-id="{{ oRegistro.tabla + '_' + oCampo.bd }}" ng-attr-name="{{ oRegistro.tabla + '_' + oCampo.bd }}" ng-model="oCampo.valor" />
+                                        <textarea class="form-control" ng-attr-id="{{ oRegistro.tabla + '_' + oCampo.bd }}" ng-attr-name="{{ oRegistro.tabla + '_' + oCampo.bd }}" ng-model="oCampo.valor" ></textarea>
                                     </div>
 
                                     <div class="form-group" ng-if="oCampo.tipo === 'seleccion_simple' || oCampo.tipo === 'seleccion_simple_texto_editable'" ng-attr-id="{{ oCampo.fila }}" ng-show="oCampo.mostrar">
