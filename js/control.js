@@ -5,6 +5,11 @@ $(document).ready(function() {
 var APPNAME = 'encuestas';
 var angularAppAQ = angular.module(APPNAME, ['ngRoute', 'oc.lazyLoad', 'ui.select', 'ngSanitize']);
 
+angularAppAQ.config(['$httpProvider', function($httpProvider) {
+  $httpProvider.defaults.xsrfCookieName = 'XSRF-TOKEN';
+  $httpProvider.defaults.xsrfHeaderName = 'X-XSRF-TOKEN';
+}]);
+
 var sProtocol = window.location.protocol.toLowerCase() === "https:" ? "https" : "http";
 
 angularAppAQ.constant('configuracionGlobal', {
@@ -13,7 +18,33 @@ angularAppAQ.constant('configuracionGlobal', {
 });
 
 angularAppAQ.controller('principalController', function ($scope, $http, $rootScope, $filter, $location, configuracionGlobal) {
+    $rootScope._csrfPromise = null;
+
+    $rootScope.ensureCsrf = function () {
+    if ($rootScope._csrfPromise) return $rootScope._csrfPromise;
+    $rootScope._csrfPromise = $http.get(configuracionGlobal.URL + 'php/csrf_init.php', { cache: false });
+    return $rootScope._csrfPromise;
+    };
+
+    $rootScope.ensureCsrf();
+
     $rootScope.validarSesion = function (bRecargarForm, sUrlSolicitud) {
+
+        $rootScope.ensureCsrf().then(function () {
+            return $http({
+            method: 'POST',
+            async: true,
+            url: configuracionGlobal.URL + 'php/ControlEncuestas.php',
+            data: { method: 'validarSesion' },
+            headers: { 'Content-type': 'application/json' }
+            });
+        }).then(function (success) {
+            $rootScope.oDatosSesion = success.data;
+            $rootScope.oDatosSesion.sUrlSolicitud = sUrlSolicitud;
+            $rootScope.$evalAsync();
+        }, function (error) {
+            console.error('❌ Error en validarSesion:', error);
+        });
         
         $http({
             'method': 'POST',
@@ -51,6 +82,22 @@ angularAppAQ.controller('principalController', function ($scope, $http, $rootSco
     };
 
     $rootScope.cerrarSesion = function () {
+        $rootScope.ensureCsrf().then(function () {
+            return $http({
+            method: 'POST',
+            async: true,
+            url: configuracionGlobal.URL + 'php/ControlEncuestas.php',
+            data: { method: 'validarSesion' },
+            headers: { 'Content-type': 'application/json' }
+            });
+        }).then(function (success) {
+            $rootScope.oDatosSesion = success.data;
+            $rootScope.oDatosSesion.sUrlSolicitud = sUrlSolicitud;
+            $rootScope.$evalAsync();
+        }, function (error) {
+            console.error('❌ Error en validarSesion:', error);
+        });
+        
         $http({
             'method': 'POST',
             'async': true,

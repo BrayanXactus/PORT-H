@@ -1,35 +1,31 @@
-angular.module(APPNAME).controller('sesionController', function($scope, $scope, $location, $http, configuracionGlobal, servicioGeneral) {
+angular.module(APPNAME).controller('sesionController', function($scope, $rootScope, $location, $http, configuracionGlobal, servicioGeneral) {
     $scope.iniciarSesion = function () {
         $scope.sErrorLogin = '';
 
-        $http({
-            'method': 'POST',
-            'async': true,
-            'url': configuracionGlobal.URL + 'php/ControlEncuestas.php',
-            'data': $scope.oLogin,
-            'headers': {
-                'Content-type': 'application/json'
-            }
+        $rootScope.ensureCsrf().then(function () {
+            return $http({
+            method: 'POST',
+            async: true,
+            url: configuracionGlobal.URL + 'php/ControlEncuestas.php',
+            data: $scope.oLogin,
+            headers: { 'Content-type': 'application/json' }
+            });
         }).then(function (success) {
             $scope.oSession = success.data;
             $scope.configurarSesionLogin();
         }, function (error) {
-            
+
         });
     };
 
     $scope.configurarSesionLogin = function () {
         if ($scope.oSession.bLogin) {
-            // Check if there's a saved destination route
             var rutaDestino = sessionStorage.getItem('rutaDestino');
             
             if (rutaDestino) {
-                // Clear the saved route
                 sessionStorage.removeItem('rutaDestino');
-                // Redirect to the original requested route
                 $location.path('/' + rutaDestino);
             } else {
-                // Default redirect if no saved route
                 $location.path("/inicio");
             }
         } else {

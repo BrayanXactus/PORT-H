@@ -1,5 +1,8 @@
 <?php
 
+require_once __DIR__ . '/_csrf_guard.php';
+csrf_require();
+
 include 'core/config.php';
 include 'library/vendor/autoload.php';
 include 'core/Archivos.php';
