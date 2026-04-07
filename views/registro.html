@@ -139,7 +139,13 @@
                                 <label class="text-bold-600" style="display:block;">{{ oCampo.titulo }}</label>
     
                                 <div class="form-check form-check-inline" ng-repeat="oOpcion in oCampo.aOpcionesLista | orderBy:'nombre'">
-                                    <input class="form-check-input" type="radio" ng-attr-name="{{ oRegistro.tabla + '_' + oCampo.bd + '_' + oOpcion.id }}" ng-attr-id="{{ oRegistro.tabla + '_' + oCampo.bd + '_' + oOpcion.id }}" ng-value="oOpcion.id" ng-model="oCampo.valor" ng-click="seleccionSimple(oRegistro.tabla, oCampo)">
+                                    <input class="form-check-input"
+                                            type="radio"
+                                            ng-attr-name="{{ oRegistro.tabla + '_' + oCampo.bd }}"
+                                            ng-attr-id="{{ oRegistro.tabla + '_' + oCampo.bd + '_' + oOpcion.id }}"
+                                            ng-value="oOpcion.id"
+                                            ng-model="oCampo.valor"
+                                            ng-change="seleccionSimple(oRegistro.tabla, oCampo)">
                                     <label class="form-check-label" ng-attr-for="{{ oRegistro.tabla + '_' + oCampo.bd + '_' + oOpcion.id }}">{{ oOpcion.nombre }}</label>
                                 </div>
                             </div>
